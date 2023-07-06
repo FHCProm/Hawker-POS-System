@@ -1,53 +1,65 @@
-<script setup>
-import HelloWorld from "./components/HelloWorld.vue";
-import TheWelcome from "./components/TheWelcome.vue";
-</script>
-
 <template>
-  <header>
-    <img
-      alt="Vue logo"
-      class="logo"
-      src="./assets/logo.svg"
-      width="125"
-      height="125"
-    />
-
-    <div class="wrapper">
-      <HelloWorld msg="You dump it!" />
+  <div class="header">选择水果</div>
+  <div class="edit-button-wrapper">
+    <button class="edit-button">更改</button>
+  </div>
+  <div class="selection-wrapper">
+    <div v-for="fruit in fruits" :key="fruit" class="one">
+      {{ fruit }}
     </div>
-  </header>
-
-  <main>
-    <TheWelcome />
-  </main>
+  </div>
 </template>
 
+<script setup>
+import { ref } from "vue";
+
+const fruits = ref([
+  "木瓜",
+  "白木薯",
+  "木瓜",
+  "白木薯",
+  "木瓜",
+  "白木薯",
+  "白木薯白木薯白木薯",
+]);
+</script>
+
 <style scoped>
-header {
-  line-height: 1.5;
+.header {
+  padding: 10px 0;
+  background: rgb(249, 186, 118);
+  width: 100%;
+  text-align: center;
+}
+.edit-button-wrapper {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  align-items: end;
+  margin-top: 0.5rem;
 }
 
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
+.edit-button {
+  margin-right: 0.5rem;
 }
 
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
+.selection-wrapper {
+  margin-top: 0.5rem;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: auto;
+  display: grid;
+}
 
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
+.one {
+  display: grid;
+  align-content: center;
+  border-radius: 2px;
+  margin: 0.5rem;
+  padding: 1rem;
+  min-height: 120px;
+  font-size: 1.5rem;
+  font-weight: 800;
+  border: 1px solid black;
+  text-align: center;
 }
 </style>
