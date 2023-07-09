@@ -17,8 +17,7 @@ body {
 .primary-button-design {
   background: #ffbf00;
   border: none;
-  box-shadow: inset 0.2rem 0.2rem 1rem #f0d37a,
-    inset -0.2rem -0.2rem 1rem #ca9803, 0.3rem 0.3rem 0.6rem #ffebb0,
+  box-shadow: inset 0.2rem 0.2rem 1rem #f0d37a, 0.3rem 0.3rem 0.6rem #ffebb0,
     -0.2rem -0.2rem 0.5rem #ffffff;
   width: 8rem;
   height: 2.5rem;
@@ -35,7 +34,6 @@ body {
   width: 4rem;
   height: 2.5rem;
   border-radius: 0.5rem;
-
   cursor: pointer;
   transition: 0.3s ease;
 }

@@ -7,9 +7,9 @@
   </div>
   <div class="selection-wrapper">
     <div v-for="fruit in fruits" :key="fruit" class="one">
-      <router-link to="/fruitDetail">
+      <div class="fruit-name-layout" @click="goToDetails(`${fruit.name}`)">
         {{ fruit.name }}
-      </router-link>
+      </div>
     </div>
   </div>
 </template>
@@ -17,10 +17,16 @@
 <script setup>
 import { ref } from "vue";
 import { useFruitStore } from "../stores/fruits";
+import { useRouter } from "vue-router";
 
 const fruitStore = useFruitStore();
 
 const fruits = fruitStore.fruitsForSale;
+const router = useRouter();
+
+function goToDetails(fruit) {
+  router.push({ name: "fruitDetail", params: { id: fruit } });
+}
 </script>
 
 <style scoped>
@@ -51,17 +57,25 @@ const fruits = fruitStore.fruitsForSale;
 }
 
 .one {
-  display: grid;
-  align-content: center;
   border-radius: 2px;
   margin: 0.5rem;
-  padding: 1rem;
   min-height: 120px;
   font-size: 1.5rem;
   font-weight: 800;
-
-  text-align: center;
   box-shadow: 4px 4px 6px #d2d3d4, -4px -4px 6px #ffffff, -2px -2px 6px #d2d3d4,
     -4px -4px 6px #ffffff;
+}
+
+.one a {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.fruit-name-layout {
+  display: grid;
+  height: 100%;
+  justify-content: center;
+  align-items: center;
 }
 </style>

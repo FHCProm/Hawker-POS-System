@@ -6,7 +6,7 @@ import FruitDetailPage from "./pages/FruitDetailPage.vue";
 const routes = [
   { path: "/", component: LandingPage },
   { path: "/edit", component: EditFruitPage },
-  { path: "/fruitDetail", component: FruitDetailPage },
+  { path: "/fruitDetail/:id", name: "fruitDetail", component: FruitDetailPage },
 ];
 
 const router = createRouter({
