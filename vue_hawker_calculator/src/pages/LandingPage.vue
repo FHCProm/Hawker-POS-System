@@ -1,11 +1,15 @@
 <template>
   <div class="header">选择水果</div>
   <div class="edit-button-wrapper">
-    <button class="edit-button">更改</button>
+    <router-link to="/edit">
+      <button class="edit-button primary-button-design">更改</button>
+    </router-link>
   </div>
   <div class="selection-wrapper">
     <div v-for="fruit in fruits" :key="fruit" class="one">
-      {{ fruit.name }}
+      <router-link to="/fruitDetail">
+        {{ fruit.name }}
+      </router-link>
     </div>
   </div>
 </template>
@@ -21,16 +25,16 @@ const fruits = fruitStore.fruitsForSale;
 
 <style scoped>
 .header {
-  padding: 1rem 0;
-  background: rgb(249, 186, 118);
+  padding: 1rem 1rem;
+  font-size: 2rem;
   width: 100%;
-  text-align: center;
+  margin-bottom: 1rem;
+  color: rgb(121, 120, 118);
 }
 .edit-button-wrapper {
   display: flex;
-  flex-direction: column;
   width: 100%;
-  align-items: end;
+  justify-content: flex-end;
   margin-top: 0.5rem;
 }
 
@@ -55,7 +59,9 @@ const fruits = fruitStore.fruitsForSale;
   min-height: 120px;
   font-size: 1.5rem;
   font-weight: 800;
-  border: 0.8px solid black;
+
   text-align: center;
+  box-shadow: 4px 4px 6px #d2d3d4, -4px -4px 6px #ffffff, -2px -2px 6px #d2d3d4,
+    -4px -4px 6px #ffffff;
 }
 </style>

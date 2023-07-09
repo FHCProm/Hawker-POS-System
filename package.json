@@ -6,7 +6,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "emulator": "cd vue_hawker_calculator && npm run build && cd .. && cordova run --emulator"
+    "emulator": "cd vue_hawker_calculator && npm run build && cd .. && cordova run --emulator",
+    "build": "cd vue_hawker_calculator && npm run build && cd .. "
   },
   "keywords": [
     "ecosystem:cordova"

@@ -1,11 +1,7 @@
 <template>
-  <!-- <LandingPage></LandingPage> -->
-  <EditFruitPage></EditFruitPage>
+  <RouterView></RouterView>
 </template>
 
-<script setup>
-import LandingPage from "./pages/LandingPage.vue";
-import EditFruitPage from "./pages/EditFruitPage.vue";
-</script>
+<script setup></script>
 
 <style scoped></style>

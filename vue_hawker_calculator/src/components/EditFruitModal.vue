@@ -1,14 +1,14 @@
 <template>
   <div :style="{ display: popUpVisibility }" class="popup" ref="popUpElement">
-    <label for="fruitName">水果名:</label><br />
+    <label class="pop-up-label" for="fruitName">水果名:</label>
     <input
       class="input-design"
       type="text"
       id="fruitName"
       v-model="fruitName"
       name="fruitName"
-    /><br />
-    <label for="fruitPrice">价格:</label><br />
+    />
+    <label class="pop-up-label" for="fruitPrice">价格:</label>
     <div class="price">
       <input
         class="input-design price-input-design"
@@ -18,7 +18,7 @@
         name="fruitPrice"
       />
     </div>
-    <br /><br />
+
     <div class="button-wrapper">
       <button class="cancel-button-design" @click="cancel">取消</button>
       <button class="primary-button-design" @click="saveFields">收藏</button>
@@ -69,11 +69,18 @@ function cancel() {
   z-index: 1;
 }
 
+.pop-up-label {
+  display: block;
+  margin: 5px 0;
+}
+
 .input-design {
   padding: 0.5rem 1rem;
   border-radius: 5px;
   font-size: 1.5rem;
+  border: none;
   width: 300px;
+  box-shadow: 2px 2px 6px #8a8b8b;
 }
 .input-design:focus {
   outline: none;
@@ -100,7 +107,7 @@ function cancel() {
 
 .button-wrapper {
   display: flex;
-
+  margin-top: 2rem;
   justify-content: space-between;
 }
 </style>
