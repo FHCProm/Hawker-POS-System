@@ -38,10 +38,11 @@
 <script setup>
 import { ref } from "vue";
 import BackButton from "../components/BackButton.vue";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import { useFruitStore } from "../stores/fruits";
 import { onMounted, nextTick } from "vue";
 
+const router = useRouter();
 const fruitKilogram = ref("0");
 let noNumberInCalculator = true;
 const calculator = ref(null);
@@ -56,7 +57,6 @@ onMounted(() => {
   nextTick(() => {
     calculator.value.style.height = `${calculatorWidth}px`;
   });
-  console.log(calculator.value.style);
 });
 
 const fruits = fruitStore.fruitsForSale;
@@ -106,7 +106,8 @@ function calulcatePrice() {
     return;
   }
   const priceOfGood = parseFloat(fruitKilogram.value) * parseFloat(fruitPrice);
-  console.log(priceOfGood.toFixed(2));
+
+  router.push({ name: "cartPage" });
 }
 </script>
 

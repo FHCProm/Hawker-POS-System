@@ -37,5 +37,18 @@ export const useFruitStore = defineStore("fruits", () => {
     },
   ]);
 
-  return { fruitsForSale };
+  const fruitsInCart = ref([
+    {
+      name: "木瓜",
+      kilogram: "1.2",
+      total: "4",
+    },
+    {
+      name: "白木薯",
+      kilogram: "2",
+      total: "5",
+    },
+  ]);
+
+  return { fruitsForSale, fruitsInCart };
 });
