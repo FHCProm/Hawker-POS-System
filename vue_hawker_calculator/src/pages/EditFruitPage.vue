@@ -47,7 +47,7 @@ const fruits = fruitStore.fruitsForSale;
 const popUpModal = ref(null);
 
 function changePopUpVisibility() {
-  popUpModal.value.popUpVisibility = "unset";
+  popUpModal.value.popUpVisibility = true;
 }
 </script>
 

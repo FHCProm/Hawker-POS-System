@@ -30,7 +30,7 @@
       <div class="number number-3" @click="appendNumber('3')">3</div>
       <div class="number number-dot" @click="appendNumber('.')">.</div>
       <div class="number number-0" @click="appendNumber('0')">0</div>
-      <div class="number number-enter" @click="calulcatePrice">Enter</div>
+      <div class="number number-enter" @click="calulcatePrice">确认</div>
     </div>
   </div>
 </template>
@@ -105,7 +105,14 @@ function calulcatePrice() {
   if (fruitKilogram.value == "" || parseFloat(fruitKilogram.value) == 0) {
     return;
   }
-  const priceOfGood = parseFloat(fruitKilogram.value) * parseFloat(fruitPrice);
+  const priceOfGood = (
+    parseFloat(fruitKilogram.value) * parseFloat(fruitPrice)
+  ).toFixed(2);
+  fruitStore.fruitsInCart.push({
+    name: fruitName,
+    kilogram: fruitKilogram,
+    total: priceOfGood,
+  });
 
   router.push({ name: "cartPage" });
 }
@@ -162,6 +169,7 @@ function calulcatePrice() {
   margin-bottom: 1rem;
   justify-content: flex-end;
   box-shadow: 2px 2px 6px #8a8b8b;
+  align-items: baseline;
 }
 .gram-design {
   height: 60px;

@@ -10,6 +10,8 @@ export const useFruitStore = defineStore("fruits", () => {
 
   // return { count, doubleCount, increment }
 
+  const bodyElement = ref(null);
+
   const fruitsForSale = ref([
     {
       name: "木瓜",

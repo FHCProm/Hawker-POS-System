@@ -1,5 +1,5 @@
 <template>
-  <div :style="{ display: popUpVisibility }" class="popup" ref="popUpElement">
+  <div class="popup" :class="{ isShown: popUpVisibility }" ref="popUpElement">
     <label class="pop-up-label" for="fruitName">水果名:</label>
     <input
       class="input-design"
@@ -24,13 +24,14 @@
       <button class="primary-button-design" @click="saveFields">收藏</button>
     </div>
   </div>
+  <div class="backdrop" :class="{ isShown: popUpVisibility }"></div>
 </template>
 
 <script setup>
 import { onMounted, ref } from "vue";
 
 const popUpElement = ref(null);
-const popUpVisibility = ref("none");
+const popUpVisibility = ref(false);
 const fruitName = ref("");
 const fruitPrice = ref("");
 
@@ -38,7 +39,7 @@ defineExpose({
   popUpVisibility,
 });
 onMounted(() => {
-  popUpVisibility.value = "none";
+  popUpVisibility.value = false;
 });
 
 function saveFields() {
@@ -48,11 +49,11 @@ function saveFields() {
   // Do something with the fields here
   //   var popup = document.querySelector(".popup");
 
-  popUpVisibility.value = "none";
+  popUpVisibility.value = false;
 }
 
 function cancel() {
-  popUpVisibility.value = "none";
+  popUpVisibility.value = false;
 }
 </script>
 
@@ -67,6 +68,21 @@ function cancel() {
   border-radius: 5px;
   box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
   z-index: 1;
+  display: none;
+}
+
+.backdrop {
+  position: absolute;
+  display: none;
+  width: 100vw;
+  height: 100vh;
+  top: 0;
+  left: 0;
+  z-index: 0;
+  background: rgba(133, 131, 131, 0.463);
+}
+.isShown {
+  display: unset;
 }
 
 .pop-up-label {
