@@ -168,7 +168,7 @@ function calulcatePrice() {
   margin: 1rem 0.5rem;
   margin-bottom: 1rem;
   justify-content: flex-end;
-  box-shadow: 2px 2px 6px #8a8b8b;
+  box-shadow: inset 2px 2px 6px #8a8b8b;
   align-items: baseline;
 }
 .gram-design {
@@ -188,7 +188,6 @@ function calulcatePrice() {
 .calculator-wrapper {
   margin: 0 0.5rem;
   min-height: 300px;
-
   padding: 0.5rem;
 }
 .calculator {
@@ -207,7 +206,6 @@ function calulcatePrice() {
   line-height: 60px;
   text-align: center;
   background: #cecdcd;
-
   border-radius: 5px;
 }
 .number:active {

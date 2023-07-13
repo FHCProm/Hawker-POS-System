@@ -80,6 +80,16 @@ function cancel() {
   left: 0;
   z-index: 0;
   background: rgba(133, 131, 131, 0.463);
+  animation: blur 1s ease-in-out forwards;
+}
+
+@keyframes blur {
+  from {
+    backdrop-filter: blur(0px);
+  }
+  to {
+    backdrop-filter: blur(5px);
+  }
 }
 .isShown {
   display: unset;

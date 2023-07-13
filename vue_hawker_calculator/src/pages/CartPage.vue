@@ -34,7 +34,12 @@
   </div>
   <div class="button-layout">
     <button class="primary-button-design set-aside">放一边</button>
-    <button class="primary-button-design collected-money">收到的钱</button>
+    <button
+      class="primary-button-design collected-money"
+      @click="changeCalculatorModalVisibility(true)"
+    >
+      收到的钱
+    </button>
     <button class="primary-button-design next-person">下一位</button>
   </div>
 
@@ -49,11 +54,16 @@
     <div class="change-third-row-value">RM7.00</div>
     <div class="second-divider"></div>
   </div>
+  <calculatorModal
+    v-if="calculatorVisibility"
+    @close-modal="changeCalculatorModalVisibility"
+  ></calculatorModal>
 </template>
 
 <script setup>
 import { onMounted, ref } from "vue";
 import { useFruitStore } from "../stores/fruits";
+import calculatorModal from "../components/calculatorModal.vue";
 
 const fruitStore = useFruitStore();
 const fruitsTaken = fruitStore.fruitsInCart;
@@ -64,6 +74,12 @@ onMounted(() => {
   }
   totalPrice.value = totalPrice.value.toFixed(2);
 });
+
+const calculatorVisibility = ref(false);
+
+function changeCalculatorModalVisibility(status) {
+  calculatorVisibility.value = status;
+}
 </script>
 
 <style scoped>
