@@ -169,12 +169,13 @@ function calulcatePrice() {
   margin-bottom: 1rem;
   justify-content: flex-end;
   box-shadow: inset 2px 2px 6px #8a8b8b;
-  align-items: baseline;
 }
 .gram-design {
   height: 60px;
   font-size: 2rem;
   outline: none;
+  display: grid;
+  align-items: center;
   margin: 0 1rem;
   border: none;
   overflow: hidden;
@@ -182,7 +183,8 @@ function calulcatePrice() {
 
 .kg-word {
   height: 60px;
-  padding-top: 20px;
+  display: grid;
+  align-items: center;
 }
 
 .calculator-wrapper {

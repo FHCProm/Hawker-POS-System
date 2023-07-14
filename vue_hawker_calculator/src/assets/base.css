@@ -15,10 +15,6 @@ body {
   min-height: 100vh;
 }
 
-#app {
-  position: relative;
-}
-
 .primary-button-design {
   background: #ffbf00;
   border: none;

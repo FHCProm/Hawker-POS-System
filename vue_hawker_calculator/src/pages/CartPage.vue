@@ -56,7 +56,7 @@
   </div>
   <calculatorModal
     v-if="calculatorVisibility"
-    @close-modal="changeCalculatorModalVisibility"
+    @closeModal="changeCalculatorModalVisibility"
   ></calculatorModal>
 </template>
 
