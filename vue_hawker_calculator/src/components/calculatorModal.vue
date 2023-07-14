@@ -1,7 +1,7 @@
 <template>
   <div class="popup-container">
     <div class="popup">
-      <calculator @close-modal="sendingEventToParent" ref="calculatorComponent">
+      <calculator @data-ready="sendingEventToParent" ref="calculatorComponent">
         <div class="calculator-display">
           <div class="RM-label">RM</div>
           <div class="RM-value">
@@ -19,11 +19,11 @@
 import { onMounted, ref } from "vue";
 import calculator from "./calculator.vue";
 
-const emit = defineEmits(["closeModal"]);
+const emit = defineEmits(["dataReady"]);
 const calculatorComponent = ref(null);
 
 function sendingEventToParent(data) {
-  emit("closeModal", data);
+  emit("dataReady", data);
 }
 </script>
 
@@ -47,7 +47,7 @@ function sendingEventToParent(data) {
   width: 90vw;
   max-width: 700px;
   animation-name: slide-up;
-  animation-duration: 0.3s;
+  animation-duration: 0.2s;
   animation-timing-function: ease-out;
 }
 

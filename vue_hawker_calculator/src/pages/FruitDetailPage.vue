@@ -11,28 +11,15 @@
       <div class="price-KG">/kg</div>
     </div>
   </div>
-  <div class="gram-design-wrapper">
-    <div class="gram-design">{{ fruitKilogram }}</div>
-    <div class="kg-word">kg</div>
-  </div>
 
-  <div class="calculator-wrapper">
-    <div class="calculator" ref="calculator">
-      <div class="number number-7" @click="appendNumber('7')">7</div>
-      <div class="number number-8" @click="appendNumber('8')">8</div>
-      <div class="number number-9" @click="appendNumber('9')">9</div>
-      <div class="number number-erase" @click="clearNumber">X</div>
-      <div class="number number-4" @click="appendNumber('4')">4</div>
-      <div class="number number-5" @click="appendNumber('5')">5</div>
-      <div class="number number-6" @click="appendNumber('6')">6</div>
-      <div class="number number-1" @click="appendNumber('1')">1</div>
-      <div class="number number-2" @click="appendNumber('2')">2</div>
-      <div class="number number-3" @click="appendNumber('3')">3</div>
-      <div class="number number-dot" @click="appendNumber('.')">.</div>
-      <div class="number number-0" @click="appendNumber('0')">0</div>
-      <div class="number number-enter" @click="calulcatePrice">确认</div>
+  <calculator ref="calculatorComponent" @data-ready="processCalculatorValue">
+    <div class="gram-design-wrapper">
+      <div class="gram-design">
+        {{ calculatorComponent?.calculatorDisplayValue }}
+      </div>
+      <div class="kg-word">kg</div>
     </div>
-  </div>
+  </calculator>
 </template>
 
 <script setup>
@@ -41,23 +28,15 @@ import BackButton from "../components/BackButton.vue";
 import { useRoute, useRouter } from "vue-router";
 import { useFruitStore } from "../stores/fruits";
 import { onMounted, nextTick } from "vue";
+import calculator from "../components/calculator.vue";
 
 const router = useRouter();
-const fruitKilogram = ref("0");
-let noNumberInCalculator = true;
-const calculator = ref(null);
 
+const calculatorComponent = ref(null);
 const fruitStore = useFruitStore();
 const route = useRoute();
 const fruitName = route.params.id;
 let fruitPrice = "";
-
-onMounted(() => {
-  const calculatorWidth = calculator.value.clientWidth;
-  nextTick(() => {
-    calculator.value.style.height = `${calculatorWidth}px`;
-  });
-});
 
 const fruits = fruitStore.fruitsForSale;
 for (let x = 0; x < fruits.length; x++) {
@@ -66,51 +45,14 @@ for (let x = 0; x < fruits.length; x++) {
   }
 }
 
-function appendNumber(number) {
-  if (noNumberInCalculator) {
-    fruitKilogram.value = "";
-    noNumberInCalculator = false;
-  }
-
-  //need to fix the starting . WHen start with dot only
-  const regex = /^\d+\.\d{1}$/;
-  if (regex.test(fruitKilogram.value)) {
+function processCalculatorValue(data) {
+  if (data == "" || parseFloat(data) == 0) {
     return;
   }
-
-  if (number == "." && fruitKilogram.value == "") {
-    fruitKilogram.value = "0.";
-  }
-
-  if (number == "." && fruitKilogram.value.includes(".")) {
-    return;
-  }
-
-  if (number == "0" && fruitKilogram.value == "0") {
-    return;
-  }
-  if (fruitKilogram.value == "0") {
-    fruitKilogram.value = number;
-    return;
-  }
-  fruitKilogram.value = fruitKilogram.value + number;
-}
-
-function clearNumber() {
-  noNumberInCalculator = true;
-  fruitKilogram.value = "0";
-}
-
-function calulcatePrice() {
-  if (fruitKilogram.value == "" || parseFloat(fruitKilogram.value) == 0) {
-    return;
-  }
-  const priceOfGood = (
-    parseFloat(fruitKilogram.value) * parseFloat(fruitPrice)
-  ).toFixed(2);
+  const priceOfGood = (parseFloat(data) * parseFloat(fruitPrice)).toFixed(2);
   fruitStore.fruitsInCart.push({
     name: fruitName,
-    kilogram: fruitKilogram,
+    kilogram: data,
     total: priceOfGood,
   });
 
@@ -165,10 +107,11 @@ function calulcatePrice() {
   display: flex;
   position: relative;
   padding: 0.5rem 3rem;
-  margin: 1rem 0.5rem;
+  margin: 1rem 1rem;
   margin-bottom: 1rem;
   justify-content: flex-end;
   box-shadow: inset 2px 2px 6px #8a8b8b;
+  background: rgb(163, 178, 163);
 }
 .gram-design {
   height: 60px;

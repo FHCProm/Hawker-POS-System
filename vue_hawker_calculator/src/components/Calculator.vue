@@ -16,7 +16,7 @@
         <div class="number number-3" @click="appendNumber('3')">3</div>
         <div class="number number-dot" @click="appendNumber('.')">.</div>
         <div class="number number-0" @click="appendNumber('0')">0</div>
-        <div class="number number-enter" @click="finalizeBuyerPaidAmount">
+        <div class="number number-enter" @click="sendingCalculatorValue">
           确认
         </div>
       </div>
@@ -31,7 +31,7 @@ let noNumberInCalculator = true;
 const calculatorDisplayValue = ref("0");
 const calculatorElement = ref(null);
 
-const emit = defineEmits(["closeModal"]);
+const emit = defineEmits(["dataReady"]);
 
 defineExpose({
   calculatorDisplayValue,
@@ -43,6 +43,7 @@ onMounted(() => {
 });
 
 function appendNumber(number) {
+  navigator.vibrate(40);
   if (noNumberInCalculator) {
     calculatorDisplayValue.value = "";
     noNumberInCalculator = false;
@@ -73,7 +74,7 @@ function clearNumber() {
   calculatorDisplayValue.value = "0";
 }
 
-function finalizeBuyerPaidAmount() {
+function sendingCalculatorValue() {
   if (
     calculatorDisplayValue.value == "" ||
     parseFloat(calculatorDisplayValue.value) == 0
@@ -81,13 +82,10 @@ function finalizeBuyerPaidAmount() {
     return;
   }
   console.log(
-    "buyer paid amount is ",
+    "calculator value is ",
     parseFloat(calculatorDisplayValue.value).toFixed(2)
   );
-  emit("closeModal", false);
-  //   const priceOfGood = (
-  //     parseFloat(calculatorDisplayValue.value) * parseFloat(fruitPrice)
-  //   ).toFixed(2);
+  emit("dataReady", calculatorDisplayValue.value);
 }
 </script>
 
@@ -113,7 +111,7 @@ function finalizeBuyerPaidAmount() {
 .number {
   display: grid;
   align-content: center;
-  font-size: 1.5rem;
+  font-size: 2rem;
   line-height: 60px;
   text-align: center;
   background: #cecdcd;

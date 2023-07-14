@@ -36,7 +36,7 @@
     <button class="primary-button-design set-aside">放一边</button>
     <button
       class="primary-button-design collected-money"
-      @click="changeCalculatorModalVisibility(true)"
+      @click="calculatorVisibility = true"
     >
       收到的钱
     </button>
@@ -56,7 +56,7 @@
   </div>
   <calculatorModal
     v-if="calculatorVisibility"
-    @closeModal="changeCalculatorModalVisibility"
+    @data-ready="makeCalculatorInvisible"
   ></calculatorModal>
 </template>
 
@@ -77,8 +77,8 @@ onMounted(() => {
 
 const calculatorVisibility = ref(false);
 
-function changeCalculatorModalVisibility(status) {
-  calculatorVisibility.value = status;
+function makeCalculatorInvisible() {
+  calculatorVisibility.value = false;
 }
 </script>
 
