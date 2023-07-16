@@ -13,6 +13,7 @@ a:-webkit-any-link {
 
 body {
   position: relative;
+  min-height: 100vh;
 }
 
 .primary-button-design {
