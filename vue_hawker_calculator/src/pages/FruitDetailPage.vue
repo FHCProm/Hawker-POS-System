@@ -105,7 +105,7 @@ function processCalculatorValue(data) {
 
 .gram-design-wrapper {
   display: flex;
-  position: relative;
+  /* position: relative; */
   padding: 0.5rem 3rem;
   margin: 1rem 1rem;
   margin-bottom: 1rem;

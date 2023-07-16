@@ -29,11 +29,11 @@ function sendingEventToParent(data) {
 
 <style scoped>
 .popup-container {
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100vh;
+  bottom: 0;
+  right: 0;
   z-index: 1;
   display: grid;
   justify-content: center;
@@ -48,7 +48,7 @@ function sendingEventToParent(data) {
   max-width: 700px;
   animation-name: slide-up;
   animation-duration: 0.2s;
-  animation-timing-function: ease-out;
+  animation-timing-function: linear;
 }
 
 @keyframes slide-up {
@@ -63,7 +63,7 @@ function sendingEventToParent(data) {
 .backdrop {
   position: absolute;
   width: 100vw;
-  height: 100vh;
+  height: 100%;
   top: 0;
   left: 0;
   z-index: 0;
@@ -82,7 +82,7 @@ function sendingEventToParent(data) {
 
 .calculator-display {
   display: flex;
-  position: relative;
+  /* position: relative; */
   padding: 1rem;
   margin: 0 1rem;
   margin-top: 1rem;
