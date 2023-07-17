@@ -235,6 +235,7 @@ function makeCalculatorInvisible() {
   margin-right: 1rem;
   margin-left: auto;
   margin-top: 2rem;
+  margin-bottom: 2rem;
 }
 
 .change-first-row-label {
