@@ -16,26 +16,17 @@ export const useFruitStore = defineStore("fruits", () => {
     {
       name: "木瓜",
       price: "2.60",
+      category: "普通",
     },
     {
       name: "白木薯",
       price: "4.00",
+      category: "普通",
     },
     {
-      name: "木瓜",
+      name: "香蕉",
       price: "2.60",
-    },
-    {
-      name: "白木薯",
-      price: "4.00",
-    },
-    {
-      name: "木瓜",
-      price: "2.60",
-    },
-    {
-      name: "白木薯",
-      price: "4.00",
+      category: "最便宜",
     },
   ]);
 
@@ -52,11 +43,22 @@ export const useFruitStore = defineStore("fruits", () => {
     },
 
     {
-      name: "白木薯",
+      name: "香蕉",
       kilogram: "2",
       total: "5",
     },
   ]);
 
-  return { fruitsForSale, fruitsInCart };
+  const saleCategories = ref([
+    "普通",
+    "做生意",
+    "最便宜",
+    "aaa",
+    "vvv",
+    "cccc",
+    "ssss",
+    "aasdsd",
+  ]);
+
+  return { fruitsForSale, fruitsInCart, saleCategories };
 });

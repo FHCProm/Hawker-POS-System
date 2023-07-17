@@ -22,15 +22,24 @@
       </svg>
     </button>
   </div>
-
   <div
-    @click="changePopUpVisibility"
-    class="fruit-details"
-    v-for="fruit in fruits"
-    :key="fruit"
+    class="fruit-spec-layout"
+    v-for="category in categoryForTheTable"
+    :key="category"
   >
-    <div class="fruit-name">{{ fruit.name }}</div>
-    <div class="fruit-price">RM{{ fruit.price }}</div>
+    <div class="fruit-category">
+      <div class="category-word">{{ category }}</div>
+      <div class="black-line"></div>
+    </div>
+    <div
+      @click="changePopUpVisibility"
+      class="fruit-specs"
+      v-for="fruit in dataForTheTable[category]"
+      :key="fruit"
+    >
+      <div class="fruit-name">{{ fruit.name }}</div>
+      <div class="fruit-price">RM{{ fruit.price }}</div>
+    </div>
   </div>
 
   <EditFruitModal ref="popUpModal"></EditFruitModal>
@@ -43,8 +52,28 @@ import { useFruitStore } from "../stores/fruits";
 import BackButton from "../components/BackButton.vue";
 
 const fruitStore = useFruitStore();
-const fruits = fruitStore.fruitsForSale;
+
 const popUpModal = ref(null);
+
+let dataForTheTable = ref({});
+let categoryForTheTable = ref([]);
+for (let i = 0; i < fruitStore.saleCategories.length; i++) {
+  dataForTheTable.value[fruitStore.saleCategories[i]] = [];
+  for (let x = 0; x < fruitStore.fruitsForSale.length; x++) {
+    if (fruitStore.fruitsForSale[x].category == fruitStore.saleCategories[i])
+      dataForTheTable.value[fruitStore.saleCategories[i]].push(
+        fruitStore.fruitsForSale[x]
+      );
+  }
+}
+
+for (let i = 0; i < fruitStore.saleCategories.length; i++) {
+  if (dataForTheTable.value[fruitStore.saleCategories[i]].length > 0) {
+    categoryForTheTable.value.push(fruitStore.saleCategories[i]);
+  }
+}
+
+categoryForTheTable.value;
 
 function changePopUpVisibility() {
   popUpModal.value.popUpVisibility = true;
@@ -62,7 +91,27 @@ function changePopUpVisibility() {
   color: rgb(121, 120, 118);
 }
 
-.fruit-details {
+.fruit-spec-layout {
+  margin-top: 1rem;
+}
+.fruit-category {
+  display: flex;
+  margin: 0 1rem;
+
+  align-items: center;
+}
+.category-word {
+  padding-right: 1rem;
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+.black-line {
+  background: rgb(143, 140, 140);
+  height: 1px;
+  flex: 1;
+}
+
+.fruit-specs {
   margin: 1rem 1rem;
   display: flex;
   font-size: 1.3rem;

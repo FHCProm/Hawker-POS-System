@@ -1,16 +1,14 @@
 <template>
   <div class="top-menu">
-    <div class="category-layout">
+    <div class="category-swipe-layout">
       <div class="categories" ref="categoryBar">
-        <div class="category">普通</div>
-        <div class="category">做生意</div>
-        <div class="category">最便宜</div>
-        <div class="category">普通</div>
-        <div class="category">做生意</div>
-        <div class="category">最便宜</div>
-        <div class="category">普通</div>
-        <div class="category">做生意</div>
-        <div class="category">pop</div>
+        <div
+          v-for="category in fruitStore.saleCategories"
+          :key="category"
+          class="category"
+        >
+          {{ category }}
+        </div>
       </div>
     </div>
     <router-link to="/edit">
@@ -24,28 +22,31 @@
 <script setup>
 import { onMounted, ref } from "vue";
 import Hammer from "hammerjs";
+import { useFruitStore } from "../stores/fruits";
 const categoryBar = ref(null);
 const buttonRef = ref(null);
+const fruitStore = useFruitStore();
+
 onMounted(() => {
   const mc = new Hammer.Manager(categoryBar.value);
   mc.add(new Hammer.Swipe({ direction: Hammer.DIRECTION_ALL }));
 
   let distanceTranslated = 0;
   const maxDistance =
-    categoryBar.value.parentElement.clientWidth - buttonRef.value.clientWidth;
+    categoryBar.value.scrollWidth - categoryBar.value.clientWidth;
 
   mc.on("swipe", (event) => {
-    // console.log("Swipe direction:", event.direction);
-    // console.log("Swipe intensity:", event.distance);
-
     if (event.direction == 2) {
       distanceTranslated -= event.distance;
     } else {
       distanceTranslated += event.distance;
     }
-    if (distanceTranslated > maxDistance) {
-      distanceTranslated = maxDistance;
-      console.log("yes");
+
+    if (distanceTranslated < -maxDistance) {
+      distanceTranslated = -maxDistance;
+    }
+    if (distanceTranslated > 0) {
+      distanceTranslated = 0;
     }
     categoryBar.value.style.transform = `translateX(${distanceTranslated}px)`;
   });
@@ -61,7 +62,7 @@ onMounted(() => {
   align-items: center;
 }
 
-.category-layout {
+.category-swipe-layout {
   flex: 1;
   margin-right: 0.5rem;
   overflow: hidden;

@@ -18,6 +18,38 @@
         name="fruitPrice"
       />
     </div>
+    <label class="category-dropdown-label pop-up-label">组:</label>
+
+    <div
+      @click="dropdownSelected = !dropdownSelected"
+      class="category-dropdown-selected input-design"
+    >
+      <div>普通</div>
+      <div>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          fill="currentColor"
+          class="chevron-up-svg"
+          :class="{ rotate: dropdownSelected }"
+        >
+          <path
+            fill-rule="evenodd"
+            d="M11.47 7.72a.75.75 0 011.06 0l7.5 7.5a.75.75 0 11-1.06 1.06L12 9.31l-6.97 6.97a.75.75 0 01-1.06-1.06l7.5-7.5z"
+            clip-rule="evenodd"
+          />
+        </svg>
+      </div>
+    </div>
+    <div class="dropdown-selection" v-if="dropdownSelected">
+      <div
+        v-for="selection in dropdownSelection"
+        :key="selection"
+        class="single-dropdown-selection"
+      >
+        {{ selection }}
+      </div>
+    </div>
 
     <div class="button-wrapper">
       <button class="cancel-button-design" @click="cancel">取消</button>
@@ -29,11 +61,17 @@
 
 <script setup>
 import { onMounted, ref } from "vue";
+import { useFruitStore } from "../stores/fruits";
 
 const popUpElement = ref(null);
 const popUpVisibility = ref(false);
 const fruitName = ref("");
 const fruitPrice = ref("");
+const fruitStore = useFruitStore();
+
+const dropdownSelected = ref(false);
+const dropdownSelection = ref([]);
+const currentSelectedCateogry = ref("普通");
 
 defineExpose({
   popUpVisibility,
@@ -41,6 +79,12 @@ defineExpose({
 onMounted(() => {
   popUpVisibility.value = false;
 });
+
+for (let i = 0; i < fruitStore.saleCategories.length; i++) {
+  if (currentSelectedCateogry.value != fruitStore.saleCategories[i]) {
+    dropdownSelection.value.push(fruitStore.saleCategories[i]);
+  }
+}
 
 function saveFields() {
   console.log(fruitName.value, "  ", fruitPrice.value);
@@ -74,8 +118,8 @@ function cancel() {
 .backdrop {
   position: absolute;
   display: none;
-  width: 100vw;
-  height: 100vh;
+  right: 0;
+  bottom: 0;
   top: 0;
   left: 0;
   z-index: 0;
@@ -97,15 +141,16 @@ function cancel() {
 
 .pop-up-label {
   display: block;
-  margin: 5px 0;
+  margin: 10px 0;
 }
 
 .input-design {
   padding: 0.5rem 1rem;
   border-radius: 5px;
-  font-size: 1.5rem;
+  font-size: 1.2rem;
   border: none;
   width: 300px;
+
   box-shadow: 2px 2px 6px #8a8b8b;
 }
 .input-design:focus {
@@ -129,6 +174,28 @@ function cancel() {
 .price-input-design {
   padding-left: 2rem;
   direction: rtl;
+}
+
+.category-dropdown-selected {
+  display: flex;
+  justify-content: space-between;
+}
+
+.chevron-up-svg {
+  width: 30px;
+  height: 100%;
+}
+
+.rotate {
+  transform: rotate(180deg);
+}
+
+.single-dropdown-selection {
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
+  font-size: 1.2rem;
+  border: 1px solid rgb(154, 153, 153);
+  width: 300px;
 }
 
 .button-wrapper {

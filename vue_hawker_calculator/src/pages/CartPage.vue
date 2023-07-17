@@ -118,7 +118,7 @@ function makeCalculatorInvisible() {
 <style scoped>
 .header {
   display: flex;
-  padding: 0 1rem;
+  padding-left: 1rem;
   font-size: 2rem;
   width: 100%;
   height: 80px;
@@ -138,16 +138,16 @@ function makeCalculatorInvisible() {
 .header-button {
   border: none;
   background: none;
-  padding: 0 1rem;
+  padding: 0 10px;
 }
 .star-svg {
-  width: 40px;
-  height: 40px;
+  width: 30px;
+  height: 30px;
   fill: gray;
 }
 .history-svg {
-  width: 40px;
-  height: 40px;
+  width: 30px;
+  height: 30px;
   stroke: gray;
 }
 
