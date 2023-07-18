@@ -1,59 +1,64 @@
 <template>
-  <div class="popup" :class="{ isShown: popUpVisibility }" ref="popUpElement">
-    <label class="pop-up-label" for="fruitName">水果名:</label>
-    <input
-      class="input-design"
-      type="text"
-      id="fruitName"
-      v-model="fruitName"
-      name="fruitName"
-    />
-    <label class="pop-up-label" for="fruitPrice">价格:</label>
-    <div class="price">
+  <div
+    class="edit-fruit-modal-container"
+    :class="{ modalIsShown: popUpVisibility }"
+  >
+    <div class="popup" ref="popUpElement">
+      <label class="pop-up-label" for="fruitName">水果名:</label>
       <input
-        class="input-design price-input-design"
+        class="input-design"
         type="text"
-        id="fruitPrice"
-        v-model="fruitPrice"
-        name="fruitPrice"
+        id="fruitName"
+        v-model="fruitName"
+        name="fruitName"
       />
-    </div>
-    <label class="category-dropdown-label pop-up-label">组:</label>
-
-    <div
-      @click="dropdownSelected = !dropdownSelected"
-      class="category-dropdown-selected input-design"
-    >
-      <div>普通</div>
-      <div>
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 24 24"
-          fill="currentColor"
-          class="chevron-up-svg"
-          :class="{ rotate: dropdownSelected }"
-        >
-          <path
-            fill-rule="evenodd"
-            d="M11.47 7.72a.75.75 0 011.06 0l7.5 7.5a.75.75 0 11-1.06 1.06L12 9.31l-6.97 6.97a.75.75 0 01-1.06-1.06l7.5-7.5z"
-            clip-rule="evenodd"
-          />
-        </svg>
+      <label class="pop-up-label" for="fruitPrice">价格:</label>
+      <div class="price">
+        <input
+          class="input-design price-input-design"
+          type="text"
+          id="fruitPrice"
+          v-model="fruitPrice"
+          name="fruitPrice"
+        />
       </div>
-    </div>
-    <div class="dropdown-selection" v-if="dropdownSelected">
+      <label class="category-dropdown-label pop-up-label">组:</label>
+
       <div
-        v-for="selection in dropdownSelection"
-        :key="selection"
-        class="single-dropdown-selection"
+        @click="dropdownSelected = !dropdownSelected"
+        class="category-dropdown-selected input-design"
       >
-        {{ selection }}
+        <div>普通</div>
+        <div>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="currentColor"
+            class="chevron-up-svg"
+            :class="{ rotate: dropdownSelected }"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M11.47 7.72a.75.75 0 011.06 0l7.5 7.5a.75.75 0 11-1.06 1.06L12 9.31l-6.97 6.97a.75.75 0 01-1.06-1.06l7.5-7.5z"
+              clip-rule="evenodd"
+            />
+          </svg>
+        </div>
       </div>
-    </div>
+      <div class="dropdown-selection" v-if="dropdownSelected">
+        <div
+          v-for="selection in dropdownSelection"
+          :key="selection"
+          class="single-dropdown-selection"
+        >
+          {{ selection }}
+        </div>
+      </div>
 
-    <div class="button-wrapper">
-      <button class="cancel-button-design" @click="cancel">取消</button>
-      <button class="primary-button-design" @click="saveFields">收藏</button>
+      <div class="button-wrapper">
+        <button class="cancel-button-design" @click="cancel">取消</button>
+        <button class="primary-button-design" @click="saveFields">收藏</button>
+      </div>
     </div>
   </div>
   <div class="backdrop" :class="{ isShown: popUpVisibility }"></div>
@@ -102,17 +107,24 @@ function cancel() {
 </script>
 
 <style scoped>
-.popup {
+.edit-fruit-modal-container {
+  overflow: auto;
   position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1;
+  display: none;
+}
+.popup {
+  margin: auto;
   background-color: white;
   padding: 20px;
   border-radius: 5px;
   box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
-  z-index: 1;
-  display: none;
+  height: min-content;
+  width: min-content;
 }
 
 .backdrop {
@@ -137,6 +149,10 @@ function cancel() {
 }
 .isShown {
   display: unset;
+}
+
+.modalIsShown {
+  display: grid;
 }
 
 .pop-up-label {

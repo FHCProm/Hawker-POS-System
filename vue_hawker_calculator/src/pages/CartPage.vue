@@ -1,96 +1,98 @@
 <template>
-  <div class="header">
-    <div class="header-word">结账</div>
-    <div class="header-button-wrapper">
-      <button class="header-button">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          class="star-svg"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z"
-          />
-        </svg>
-      </button>
-      <button class="header-button">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke-width="1.5"
-          stroke="currentColor"
-          class="history-svg"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25M9 16.5v.75m3-3v3M15 12v5.25m-4.5-15H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z"
-          />
-        </svg>
-      </button>
-    </div>
-  </div>
-  <div class="fruit-detail" v-for="fruit in fruitsTaken" :key="fruit">
-    <div class="name-gram-wrapper">
-      <div class="fruit-name">{{ fruit.name }}</div>
-      <div class="fruit-gram">{{ fruit.kilogram }}kg</div>
-    </div>
-    <div class="fruit-price">RM{{ fruit.total }}</div>
-  </div>
-  <router-link to="/">
-    <div class="plus-button-layout">
-      <div class="plus-button-wrapper">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke-width="3"
-          stroke="currentColor"
-          class="plus-button"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            d="M12 4.5v15m7.5-7.5h-15"
-          />
-        </svg>
+  <div class="cartPage">
+    <div class="header">
+      <div class="header-word">结账</div>
+      <div class="header-button-wrapper">
+        <button class="header-button">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            class="star-svg"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z"
+            />
+          </svg>
+        </button>
+        <button class="header-button">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.5"
+            stroke="currentColor"
+            class="history-svg"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25M9 16.5v.75m3-3v3M15 12v5.25m-4.5-15H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z"
+            />
+          </svg>
+        </button>
       </div>
     </div>
-  </router-link>
+    <div class="fruit-detail" v-for="fruit in fruitsTaken" :key="fruit">
+      <div class="name-gram-wrapper">
+        <div class="fruit-name">{{ fruit.name }}</div>
+        <div class="fruit-gram">{{ fruit.kilogram }}kg</div>
+      </div>
+      <div class="fruit-price">RM{{ fruit.total }}</div>
+    </div>
+    <router-link to="/">
+      <div class="plus-button-layout">
+        <div class="plus-button-wrapper">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="3"
+            stroke="currentColor"
+            class="plus-button"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M12 4.5v15m7.5-7.5h-15"
+            />
+          </svg>
+        </div>
+      </div>
+    </router-link>
 
-  <div class="total-amount-layout">
-    <div class="total-amount-label">总额:</div>
-    <div class="total-amount-value">RM{{ totalPrice }}</div>
-  </div>
-  <div class="button-layout">
-    <button
-      class="primary-button-design collected-money"
-      @click="calculatorVisibility = true"
-    >
-      收到的钱
-    </button>
-    <button class="primary-button-design next-person">下一位</button>
-  </div>
+    <div class="total-amount-layout">
+      <div class="total-amount-label">总额:</div>
+      <div class="total-amount-value">RM{{ totalPrice }}</div>
+    </div>
+    <div class="button-layout">
+      <button
+        class="primary-button-design collected-money"
+        @click="calculatorVisibility = true"
+      >
+        收到的钱
+      </button>
+      <button class="primary-button-design next-person">下一位</button>
+    </div>
 
-  <div class="calculate-change">
-    <div class="change-first-row-label">收到的钱：</div>
-    <div class="change-first-row-value">RM12.50</div>
-    <div class="change-second-row-label">水果价钱：</div>
-    <div class="change-second-row-value">RM5.00</div>
-    <div class="minus-symbol">-</div>
-    <div class="first-divider"></div>
-    <div class="change-third-row-label">要找的钱:</div>
-    <div class="change-third-row-value">RM7.00</div>
-    <div class="second-divider"></div>
+    <div class="calculate-change">
+      <div class="change-first-row-label">收到的钱：</div>
+      <div class="change-first-row-value">RM12.50</div>
+      <div class="change-second-row-label">水果价钱：</div>
+      <div class="change-second-row-value">RM5.00</div>
+      <div class="minus-symbol">-</div>
+      <div class="first-divider"></div>
+      <div class="change-third-row-label">要找的钱:</div>
+      <div class="change-third-row-value">RM7.00</div>
+      <div class="second-divider"></div>
+    </div>
+    <calculatorModal
+      v-if="calculatorVisibility"
+      @data-ready="makeCalculatorInvisible"
+    ></calculatorModal>
   </div>
-  <calculatorModal
-    v-if="calculatorVisibility"
-    @data-ready="makeCalculatorInvisible"
-  ></calculatorModal>
 </template>
 
 <script setup>

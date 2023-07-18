@@ -29,7 +29,7 @@ function sendingEventToParent(data) {
 
 <style scoped>
 .popup-container {
-  position: fixed;
+  position: absolute;
   top: 0;
   left: 0;
   bottom: 0;
@@ -38,6 +38,7 @@ function sendingEventToParent(data) {
   display: grid;
   justify-content: center;
   align-items: end;
+  overflow: auto;
 }
 .popup {
   margin-bottom: 100px;
@@ -62,8 +63,8 @@ function sendingEventToParent(data) {
 
 .backdrop {
   position: absolute;
-  width: 100vw;
-  height: 100%;
+  right: 0;
+  bottom: 0;
   top: 0;
   left: 0;
   z-index: 0;

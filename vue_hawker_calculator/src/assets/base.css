@@ -11,8 +11,12 @@ a:-webkit-any-link {
   text-decoration: none;
 }
 
-body {
+html {
   position: relative;
+}
+
+body {
+  /* position: relative; */
   min-height: 100vh;
 }
 
