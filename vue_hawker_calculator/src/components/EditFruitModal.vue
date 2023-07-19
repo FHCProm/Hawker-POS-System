@@ -87,6 +87,8 @@ const currentSelectedCateogry = ref("普通");
 let selectedFruitId = ref(null);
 let fieldsIncorrect = ref(false);
 
+const emit = defineEmits(["readyForReload"]);
+
 defineExpose({
   popUpVisibility,
   selectedFruitId,
@@ -94,7 +96,6 @@ defineExpose({
 });
 onMounted(() => {
   popUpVisibility.value = false;
-  reloadDropdownCategory();
 });
 
 function reloadDropdownCategory() {
@@ -114,6 +115,11 @@ function categoryChanged(selection) {
 
 function fillUpFields() {
   fieldsIncorrect.value = false;
+  refreshFieldsToDefault();
+  reloadDropdownCategory();
+  if (selectedFruitId.value == undefined) {
+    return;
+  }
   for (let i = 0; i < fruitStore.fruitsForSale.length; i++) {
     if (fruitStore.fruitsForSale[i].id == selectedFruitId.value) {
       fruitName.value = fruitStore.fruitsForSale[i].name;
@@ -130,20 +136,42 @@ function saveFields() {
     fieldsIncorrect.value = true;
     return;
   }
+  if (selectedFruitId.value == undefined) {
+    let date = new Date();
+    let newFruit = {
+      id: date.getTime(),
+      name: fruitName.value,
+      price: parseFloat(fruitPrice.value).toFixed(2),
+      category: currentSelectedCateogry.value,
+    };
+    fruitStore.fruitsForSale.push(newFruit);
+  }
 
-  for (let i = 0; i < fruitStore.fruitsForSale.length; i++) {
-    if (fruitStore.fruitsForSale[i].id == selectedFruitId.value) {
-      fruitStore.fruitsForSale[i].name = fruitName.value;
-      fruitStore.fruitsForSale[i].price = fruitPrice.value;
-      fruitStore.fruitsForSale[i].category = currentSelectedCateogry.value;
+  if (selectedFruitId.value != undefined) {
+    for (let i = 0; i < fruitStore.fruitsForSale.length; i++) {
+      if (fruitStore.fruitsForSale[i].id == selectedFruitId.value) {
+        fruitStore.fruitsForSale[i].name = fruitName.value;
+        fruitStore.fruitsForSale[i].price = parseFloat(
+          fruitPrice.value
+        ).toFixed(2);
+        fruitStore.fruitsForSale[i].category = currentSelectedCateogry.value;
+      }
     }
   }
+
+  emit("readyForReload");
 
   popUpVisibility.value = false;
 }
 
 function cancel() {
   popUpVisibility.value = false;
+}
+
+function refreshFieldsToDefault() {
+  fruitName.value = "";
+  fruitPrice.value = "";
+  currentSelectedCateogry.value = "普通";
 }
 </script>
 
@@ -208,7 +236,7 @@ function cancel() {
   border: none;
   width: 300px;
 
-  box-shadow: 2px 2px 6px #8a8b8b;
+  box-shadow: 1px 1px 3px #555555;
 }
 .input-design:focus {
   outline: none;
@@ -229,8 +257,7 @@ function cancel() {
 }
 
 .price-input-design {
-  padding-left: 2rem;
-  direction: rtl;
+  padding-left: 3rem;
 }
 
 .category-dropdown-selected {

@@ -5,7 +5,10 @@
   </div>
 
   <div class="add-button-wrapper">
-    <button class="add-button primary-button-design">
+    <button
+      class="add-button primary-button-design"
+      @click="changePopUpVisibility()"
+    >
       <svg
         xmlns="http://www.w3.org/2000/svg"
         fill="none"
@@ -35,40 +38,78 @@
       class="fruit-specs"
       v-for="fruit in dataForTheTable[category]"
       :key="fruit"
-      @click="changePopUpVisibility(fruit.id)"
     >
-      <div class="fruit-name">{{ fruit.name }}</div>
-      <div class="fruit-price">RM{{ fruit.price }}</div>
+      <div class="name-price-layout" @click="changePopUpVisibility(fruit.id)">
+        <div class="fruit-name">{{ fruit.name }}</div>
+        <div class="fruit-price">RM{{ fruit.price }}</div>
+      </div>
+      <div class="delete-svg-layout" @click="confirmUserAction(fruit.id)">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke-width="1.5"
+          stroke="currentColor"
+          class="delete-svg"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M9.75 9.75l4.5 4.5m0-4.5l-4.5 4.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+          />
+        </svg>
+      </div>
     </div>
   </div>
 
-  <EditFruitModal ref="popUpModal"></EditFruitModal>
+  <EditFruitModal
+    ref="popUpModal"
+    @ready-for-reload="reloadTables"
+  ></EditFruitModal>
+  <ConfirmationBox
+    v-if="confirmationBoxVisibility"
+    @confirmation-done="deleteFruit"
+  ></ConfirmationBox>
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
 import EditFruitModal from "../components/EditFruitModal.vue";
 import { useFruitStore } from "../stores/fruits";
 import BackButton from "../components/BackButton.vue";
+import ConfirmationBox from "../components/ConfirmationBox.vue";
 
 const fruitStore = useFruitStore();
 const popUpModal = ref(null);
+const confirmationBoxVisibility = ref(false);
 
 let dataForTheTable = ref({});
 let categoryForTheTable = ref([]);
-for (let i = 0; i < fruitStore.saleCategories.length; i++) {
-  dataForTheTable.value[fruitStore.saleCategories[i]] = [];
-  for (let x = 0; x < fruitStore.fruitsForSale.length; x++) {
-    if (fruitStore.fruitsForSale[x].category == fruitStore.saleCategories[i])
-      dataForTheTable.value[fruitStore.saleCategories[i]].push(
-        fruitStore.fruitsForSale[x]
-      );
+let selectedIdForConfirmationBox = ref(null);
+
+onMounted(() => {
+  getDataForTheTable();
+  removeEmptyCategory();
+});
+
+function getDataForTheTable() {
+  for (let i = 0; i < fruitStore.saleCategories.length; i++) {
+    dataForTheTable.value[fruitStore.saleCategories[i]] = [];
+    for (let x = 0; x < fruitStore.fruitsForSale.length; x++) {
+      if (fruitStore.fruitsForSale[x].category == fruitStore.saleCategories[i])
+        dataForTheTable.value[fruitStore.saleCategories[i]].push(
+          fruitStore.fruitsForSale[x]
+        );
+    }
   }
 }
 
-for (let i = 0; i < fruitStore.saleCategories.length; i++) {
-  if (dataForTheTable.value[fruitStore.saleCategories[i]].length > 0) {
-    categoryForTheTable.value.push(fruitStore.saleCategories[i]);
+function removeEmptyCategory() {
+  categoryForTheTable.value = [];
+  for (let i = 0; i < fruitStore.saleCategories.length; i++) {
+    if (dataForTheTable.value[fruitStore.saleCategories[i]].length > 0) {
+      categoryForTheTable.value.push(fruitStore.saleCategories[i]);
+    }
   }
 }
 
@@ -76,6 +117,33 @@ function changePopUpVisibility(id) {
   popUpModal.value.selectedFruitId = id;
   popUpModal.value.fillUpFields();
   popUpModal.value.popUpVisibility = true;
+}
+
+function reloadTables() {
+  getDataForTheTable();
+  removeEmptyCategory();
+}
+
+function confirmUserAction(id) {
+  selectedIdForConfirmationBox.value = id;
+  confirmationBoxVisibility.value = true;
+}
+
+function deleteFruit(decision) {
+  confirmationBoxVisibility.value = false;
+  if (decision) {
+    let indexToRemove = undefined;
+
+    for (let i = 0; i < fruitStore.fruitsForSale.length; i++) {
+      if (
+        fruitStore.fruitsForSale[i].id == selectedIdForConfirmationBox.value
+      ) {
+        indexToRemove = i;
+      }
+    }
+    fruitStore.fruitsForSale.splice(indexToRemove, 1);
+    reloadTables();
+  }
 }
 </script>
 
@@ -113,18 +181,24 @@ function changePopUpVisibility(id) {
 .fruit-specs {
   margin: 1rem 1rem;
   display: flex;
+
   font-size: 1.3rem;
   box-shadow: 4px 4px 6px #d2d3d4, -4px -4px 6px #ffffff, -2px -2px 6px #d2d3d4,
     -4px -4px 6px #ffffff;
 }
 
+.name-price-layout {
+  display: flex;
+  flex: 1;
+}
+
 .fruit-name {
   padding: 1rem 1rem;
-  flex: 2;
+  flex: 1;
 }
 .fruit-price {
   flex: 1;
-  padding: 1rem 0;
+  margin: auto;
 }
 
 .add-button-wrapper {
@@ -144,5 +218,14 @@ function changePopUpVisibility(id) {
 .add-svg {
   height: 30px;
   width: 30px;
+}
+.delete-svg-layout {
+  padding: 0 10px;
+  margin: auto;
+}
+.delete-svg {
+  width: 30px;
+  stroke: red;
+  height: 30px;
 }
 </style>

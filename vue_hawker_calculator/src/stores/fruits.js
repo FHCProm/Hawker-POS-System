@@ -14,19 +14,19 @@ export const useFruitStore = defineStore("fruits", () => {
 
   const fruitsForSale = ref([
     {
-      id: 1,
+      id: 1689777471127,
       name: "木瓜",
       price: "2.60",
       category: "普通",
     },
     {
-      id: 2,
+      id: 1689777471128,
       name: "白木薯",
       price: "4.00",
       category: "普通",
     },
     {
-      id: 3,
+      id: 1689777471129,
       name: "香蕉",
       price: "2.60",
       category: "最便宜",
