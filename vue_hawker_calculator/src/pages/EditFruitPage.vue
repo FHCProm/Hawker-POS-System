@@ -32,10 +32,10 @@
       <div class="black-line"></div>
     </div>
     <div
-      @click="changePopUpVisibility"
       class="fruit-specs"
       v-for="fruit in dataForTheTable[category]"
       :key="fruit"
+      @click="changePopUpVisibility(fruit.id)"
     >
       <div class="fruit-name">{{ fruit.name }}</div>
       <div class="fruit-price">RM{{ fruit.price }}</div>
@@ -52,7 +52,6 @@ import { useFruitStore } from "../stores/fruits";
 import BackButton from "../components/BackButton.vue";
 
 const fruitStore = useFruitStore();
-
 const popUpModal = ref(null);
 
 let dataForTheTable = ref({});
@@ -73,9 +72,9 @@ for (let i = 0; i < fruitStore.saleCategories.length; i++) {
   }
 }
 
-categoryForTheTable.value;
-
-function changePopUpVisibility() {
+function changePopUpVisibility(id) {
+  popUpModal.value.selectedFruitId = id;
+  popUpModal.value.fillUpFields();
   popUpModal.value.popUpVisibility = true;
 }
 </script>

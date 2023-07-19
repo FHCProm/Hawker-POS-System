@@ -28,7 +28,7 @@
         @click="dropdownSelected = !dropdownSelected"
         class="category-dropdown-selected input-design"
       >
-        <div>普通</div>
+        <div>{{ currentSelectedCateogry }}</div>
         <div>
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -50,14 +50,20 @@
           v-for="selection in dropdownSelection"
           :key="selection"
           class="single-dropdown-selection"
+          @click="categoryChanged(selection)"
         >
           {{ selection }}
         </div>
       </div>
+      <div class="warning-text" v-if="fieldsIncorrect">
+        fields are not allowed to be empty
+      </div>
 
       <div class="button-wrapper">
         <button class="cancel-button-design" @click="cancel">取消</button>
-        <button class="primary-button-design" @click="saveFields">收藏</button>
+        <button class="primary-button-design save-button" @click="saveFields">
+          收藏
+        </button>
       </div>
     </div>
   </div>
@@ -78,25 +84,60 @@ const dropdownSelected = ref(false);
 const dropdownSelection = ref([]);
 const currentSelectedCateogry = ref("普通");
 
+let selectedFruitId = ref(null);
+let fieldsIncorrect = ref(false);
+
 defineExpose({
   popUpVisibility,
+  selectedFruitId,
+  fillUpFields,
 });
 onMounted(() => {
   popUpVisibility.value = false;
+  reloadDropdownCategory();
 });
 
-for (let i = 0; i < fruitStore.saleCategories.length; i++) {
-  if (currentSelectedCateogry.value != fruitStore.saleCategories[i]) {
-    dropdownSelection.value.push(fruitStore.saleCategories[i]);
+function reloadDropdownCategory() {
+  dropdownSelection.value = [];
+  for (let i = 0; i < fruitStore.saleCategories.length; i++) {
+    if (currentSelectedCateogry.value != fruitStore.saleCategories[i]) {
+      dropdownSelection.value.push(fruitStore.saleCategories[i]);
+    }
+  }
+}
+
+function categoryChanged(selection) {
+  currentSelectedCateogry.value = selection;
+  dropdownSelected.value = false;
+  reloadDropdownCategory();
+}
+
+function fillUpFields() {
+  fieldsIncorrect.value = false;
+  for (let i = 0; i < fruitStore.fruitsForSale.length; i++) {
+    if (fruitStore.fruitsForSale[i].id == selectedFruitId.value) {
+      fruitName.value = fruitStore.fruitsForSale[i].name;
+      fruitPrice.value = fruitStore.fruitsForSale[i].price;
+      currentSelectedCateogry.value = fruitStore.fruitsForSale[i].category;
+      reloadDropdownCategory();
+      return;
+    }
   }
 }
 
 function saveFields() {
-  console.log(fruitName.value, "  ", fruitPrice.value);
-  //   var field1 = document.getElementById("field1").value;
-  //   var field2 = document.getElementById("field2").value;
-  // Do something with the fields here
-  //   var popup = document.querySelector(".popup");
+  if (fruitName.value == "" || fruitPrice.value == "") {
+    fieldsIncorrect.value = true;
+    return;
+  }
+
+  for (let i = 0; i < fruitStore.fruitsForSale.length; i++) {
+    if (fruitStore.fruitsForSale[i].id == selectedFruitId.value) {
+      fruitStore.fruitsForSale[i].name = fruitName.value;
+      fruitStore.fruitsForSale[i].price = fruitPrice.value;
+      fruitStore.fruitsForSale[i].category = currentSelectedCateogry.value;
+    }
+  }
 
   popUpVisibility.value = false;
 }
@@ -218,5 +259,12 @@ function cancel() {
   display: flex;
   margin-top: 2rem;
   justify-content: space-between;
+}
+
+.warning-text {
+  color: red;
+}
+.save-button {
+  width: 5rem;
 }
 </style>

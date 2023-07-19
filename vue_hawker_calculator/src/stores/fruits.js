@@ -14,16 +14,19 @@ export const useFruitStore = defineStore("fruits", () => {
 
   const fruitsForSale = ref([
     {
+      id: 1,
       name: "木瓜",
       price: "2.60",
       category: "普通",
     },
     {
+      id: 2,
       name: "白木薯",
       price: "4.00",
       category: "普通",
     },
     {
+      id: 3,
       name: "香蕉",
       price: "2.60",
       category: "最便宜",
@@ -41,7 +44,6 @@ export const useFruitStore = defineStore("fruits", () => {
       kilogram: "2",
       total: "5",
     },
-
     {
       name: "香蕉",
       kilogram: "2",
