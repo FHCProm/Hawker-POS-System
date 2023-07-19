@@ -49,16 +49,7 @@ export const useFruitStore = defineStore("fruits", () => {
     },
   ]);
 
-  const saleCategories = ref([
-    "普通",
-    "做生意",
-    "最便宜",
-    "aaa",
-    "vvv",
-    "cccc",
-    "ssss",
-    "aasdsd",
-  ]);
+  const saleCategories = ref(["普通", "做生意", "最便宜"]);
 
   return { fruitsForSale, fruitsInCart, saleCategories };
 });

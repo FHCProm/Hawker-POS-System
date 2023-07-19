@@ -18,9 +18,9 @@
       </svg>
     </router-link>
   </div>
-  <top-menu-bar></top-menu-bar>
+  <top-menu-bar @changed-category="sortFruit"></top-menu-bar>
   <div class="selection-wrapper">
-    <div v-for="fruit in fruits" :key="fruit" class="one">
+    <div v-for="fruit in sortedFruits" :key="fruit" class="one">
       <div class="fruit-name-layout" @click="goToDetails(`${fruit.name}`)">
         {{ fruit.name }}
       </div>
@@ -29,7 +29,7 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 import { useFruitStore } from "../stores/fruits";
 import { useRouter } from "vue-router";
 import TopMenuBar from "../components/TopMenuBar.vue";
@@ -37,10 +37,25 @@ import TopMenuBar from "../components/TopMenuBar.vue";
 const fruitStore = useFruitStore();
 
 const fruits = fruitStore.fruitsForSale;
+const sortedFruits = ref([]);
 const router = useRouter();
+
+onMounted(() => {
+  sortFruit();
+});
 
 function goToDetails(fruit) {
   router.push({ name: "fruitDetail", params: { id: fruit } });
+}
+
+function sortFruit(category) {
+  //topMenuBar.value.selectedCategory;
+  sortedFruits.value = [];
+  for (let i = 0; i < fruits.length; i++) {
+    if (fruits[i].category == category) {
+      sortedFruits.value.push(fruits[i]);
+    }
+  }
 }
 </script>
 

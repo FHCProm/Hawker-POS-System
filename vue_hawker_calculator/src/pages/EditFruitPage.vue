@@ -136,6 +136,10 @@ function changePopUpVisibility() {
 }
 
 .add-button {
+  display: flex;
+  width: min-content;
+  align-items: center;
+  padding: 0 1rem;
 }
 
 .add-svg {
