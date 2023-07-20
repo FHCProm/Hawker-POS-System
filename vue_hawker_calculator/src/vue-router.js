@@ -5,7 +5,7 @@ import FruitDetailPage from "./pages/FruitDetailPage.vue";
 import CartPage from "./pages/CartPage.vue";
 
 const routes = [
-  { path: "/", component: LandingPage },
+  { path: "/", name: "home", component: LandingPage },
   { path: "/edit", component: EditFruitPage },
   { path: "/fruitDetail/:id", name: "fruitDetail", component: FruitDetailPage },
   { path: "/cartPage", name: "cartPage", component: CartPage },

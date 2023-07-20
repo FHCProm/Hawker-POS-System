@@ -41,7 +41,9 @@
     >
       <div class="name-price-layout" @click="changePopUpVisibility(fruit.id)">
         <div class="fruit-name">{{ fruit.name }}</div>
-        <div class="fruit-price">RM{{ fruit.price }}</div>
+        <div class="fruit-price">
+          RM{{ fruit.price }}/{{ fruit.measurement }}
+        </div>
       </div>
       <div class="delete-svg-layout" @click="confirmUserAction(fruit.id)">
         <svg

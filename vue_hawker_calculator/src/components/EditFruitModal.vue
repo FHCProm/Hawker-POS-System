@@ -29,7 +29,7 @@
             class="measurement-dropdown"
             @click="measurementDropdownSelected = !measurementDropdownSelected"
           >
-            kg
+            {{ currentSelectedMeasurementDropdownCategory }}
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 24 24"
@@ -43,6 +43,21 @@
                 clip-rule="evenodd"
               />
             </svg>
+            <div
+              class="measurement-dropDown-selection"
+              v-if="measurementDropdownSelected"
+            >
+              <div
+                v-for="measurementCategory in measurementDropdownSelection"
+                :key="measurementCategory"
+                class="measurement-choice"
+                @click.stop="
+                  categoryChanged('measurement', measurementCategory)
+                "
+              >
+                {{ measurementCategory }}
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -53,7 +68,7 @@
         @click="groupDropdownSelected = !groupDropdownSelected"
         class="category-dropdown-selected input-design"
       >
-        <div>{{ currentSelectedCateogry }}</div>
+        <div>{{ currentSelectedGroupDropdownCateogry }}</div>
         <div>
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -75,7 +90,7 @@
           v-for="selection in groupDropdownSelection"
           :key="selection"
           class="single-dropdown-selection"
-          @click="categoryChanged(selection)"
+          @click="categoryChanged('group', selection)"
         >
           {{ selection }}
         </div>
@@ -107,9 +122,11 @@ const fruitStore = useFruitStore();
 
 const groupDropdownSelected = ref(false);
 const groupDropdownSelection = ref([]);
-const currentSelectedCateogry = ref("普通");
+const currentSelectedGroupDropdownCateogry = ref("普通");
 
 const measurementDropdownSelected = ref(false);
+const measurementDropdownSelection = ref([]);
+const currentSelectedMeasurementDropdownCategory = ref("kg");
 
 let selectedFruitId = ref(null);
 let fieldsIncorrect = ref(false);
@@ -127,17 +144,39 @@ onMounted(() => {
 
 function reloadDropdownCategory() {
   groupDropdownSelection.value = [];
+  measurementDropdownSelection.value = [];
   for (let i = 0; i < fruitStore.saleCategories.length; i++) {
-    if (currentSelectedCateogry.value != fruitStore.saleCategories[i]) {
+    if (
+      currentSelectedGroupDropdownCateogry.value != fruitStore.saleCategories[i]
+    ) {
       groupDropdownSelection.value.push(fruitStore.saleCategories[i]);
+    }
+  }
+
+  for (let i = 0; i < fruitStore.measurementCategory.length; i++) {
+    if (
+      currentSelectedMeasurementDropdownCategory.value !=
+      fruitStore.measurementCategory[i]
+    ) {
+      measurementDropdownSelection.value.push(
+        fruitStore.measurementCategory[i]
+      );
     }
   }
 }
 
-function categoryChanged(selection) {
-  currentSelectedCateogry.value = selection;
-  groupDropdownSelected.value = false;
-  reloadDropdownCategory();
+function categoryChanged(dropdownName, selection) {
+  if (dropdownName == "group") {
+    currentSelectedGroupDropdownCateogry.value = selection;
+    groupDropdownSelected.value = false;
+    reloadDropdownCategory();
+  }
+
+  if (dropdownName == "measurement") {
+    currentSelectedMeasurementDropdownCategory.value = selection;
+    measurementDropdownSelected.value = false;
+    reloadDropdownCategory();
+  }
 }
 
 function fillUpFields() {
@@ -151,7 +190,10 @@ function fillUpFields() {
     if (fruitStore.fruitsForSale[i].id == selectedFruitId.value) {
       fruitName.value = fruitStore.fruitsForSale[i].name;
       fruitPrice.value = fruitStore.fruitsForSale[i].price;
-      currentSelectedCateogry.value = fruitStore.fruitsForSale[i].category;
+      currentSelectedGroupDropdownCateogry.value =
+        fruitStore.fruitsForSale[i].category;
+      currentSelectedMeasurementDropdownCategory.value =
+        fruitStore.fruitsForSale[i].measurement;
       reloadDropdownCategory();
       return;
     }
@@ -169,7 +211,8 @@ function saveFields() {
       id: date.getTime(),
       name: fruitName.value,
       price: parseFloat(fruitPrice.value).toFixed(2),
-      category: currentSelectedCateogry.value,
+      measurement: currentSelectedMeasurementDropdownCategory.value,
+      category: currentSelectedGroupDropdownCateogry.value,
     };
     fruitStore.fruitsForSale.push(newFruit);
   }
@@ -181,7 +224,10 @@ function saveFields() {
         fruitStore.fruitsForSale[i].price = parseFloat(
           fruitPrice.value
         ).toFixed(2);
-        fruitStore.fruitsForSale[i].category = currentSelectedCateogry.value;
+        fruitStore.fruitsForSale[i].category =
+          currentSelectedGroupDropdownCateogry.value;
+        fruitStore.fruitsForSale[i].measurement =
+          currentSelectedMeasurementDropdownCategory.value;
       }
     }
   }
@@ -198,7 +244,7 @@ function cancel() {
 function refreshFieldsToDefault() {
   fruitName.value = "";
   fruitPrice.value = "";
-  currentSelectedCateogry.value = "普通";
+  currentSelectedGroupDropdownCateogry.value = "普通";
 }
 </script>
 
@@ -313,6 +359,7 @@ function refreshFieldsToDefault() {
 }
 .measurement-dropdown {
   flex: 2;
+  position: relative;
   width: 50px;
   border-radius: 5px;
   box-shadow: 1px 1px 3px #555555;
@@ -321,6 +368,21 @@ function refreshFieldsToDefault() {
   align-items: center;
   justify-content: space-between;
   padding: 0 5px;
+}
+
+.measurement-dropDown-selection {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50px;
+  z-index: 10;
+  background: rgb(221, 221, 221);
+}
+.measurement-choice {
+  width: 100%;
+  padding: 0.3rem 0.3rem;
+  border-radius: 5px;
+  border: 1px solid rgb(111, 110, 110);
 }
 
 .category-dropdown-selected {
@@ -343,6 +405,7 @@ function refreshFieldsToDefault() {
   font-size: 1.2rem;
   border: 1px solid rgb(154, 153, 153);
   width: 300px;
+  background: rgb(221, 221, 221);
 }
 
 .button-wrapper {

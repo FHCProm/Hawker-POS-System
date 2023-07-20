@@ -6,7 +6,7 @@
   <top-menu-bar @changed-category="sortFruit"></top-menu-bar>
   <div class="selection-wrapper">
     <div v-for="fruit in sortedFruits" :key="fruit" class="one">
-      <div class="fruit-name-layout" @click="goToDetails(`${fruit.name}`)">
+      <div class="fruit-name-layout" @click="goToDetails(`${fruit.id}`)">
         {{ fruit.name }}
       </div>
     </div>
@@ -30,8 +30,8 @@ onMounted(() => {
   sortFruit();
 });
 
-function goToDetails(fruit) {
-  router.push({ name: "fruitDetail", params: { id: fruit } });
+function goToDetails(fruitId) {
+  router.push({ name: "fruitDetail", params: { id: fruitId } });
 }
 
 function sortFruit(category) {

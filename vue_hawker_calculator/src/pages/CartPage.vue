@@ -35,12 +35,34 @@
         </button>
       </div>
     </div>
-    <div class="fruit-detail" v-for="fruit in fruitsTaken" :key="fruit">
+    <div
+      class="fruit-detail"
+      v-for="fruit in fruitStore.fruitsInCart"
+      :key="fruit"
+    >
       <div class="name-gram-wrapper">
         <div class="fruit-name">{{ fruit.name }}</div>
-        <div class="fruit-gram">{{ fruit.kilogram }}kg</div>
+        <div class="fruit-gram">
+          {{ fruit.measuredAmount }}{{ fruit.measurement }}
+        </div>
       </div>
       <div class="fruit-price">RM{{ fruit.total }}</div>
+      <div class="delete-svg-layout" @click="removeFruit(fruit.tradeId)">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke-width="1.5"
+          stroke="currentColor"
+          class="delete-svg"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M9.75 9.75l4.5 4.5m0-4.5l-4.5 4.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+          />
+        </svg>
+      </div>
     </div>
     <router-link to="/">
       <div class="plus-button-layout">
@@ -74,18 +96,23 @@
       >
         收到的钱
       </button>
-      <button class="primary-button-design next-person">下一位</button>
+      <button
+        class="primary-button-design next-person"
+        @click="moveOnToNextTrade"
+      >
+        下一位
+      </button>
     </div>
 
-    <div class="calculate-change">
+    <div class="calculate-change" v-if="moneyToGiveBackVisibility">
       <div class="change-first-row-label">收到的钱：</div>
-      <div class="change-first-row-value">RM12.50</div>
+      <div class="change-first-row-value">{{ customerPaidAmount }}</div>
       <div class="change-second-row-label">水果价钱：</div>
-      <div class="change-second-row-value">RM5.00</div>
+      <div class="change-second-row-value">{{ totalPrice }}</div>
       <div class="minus-symbol">-</div>
       <div class="first-divider"></div>
       <div class="change-third-row-label">要找的钱:</div>
-      <div class="change-third-row-value">RM7.00</div>
+      <div class="change-third-row-value">{{ moneyToGiveBackToCustomer }}</div>
       <div class="second-divider"></div>
     </div>
     <calculatorModal
@@ -99,21 +126,56 @@
 import { onMounted, ref } from "vue";
 import { useFruitStore } from "../stores/fruits";
 import calculatorModal from "../components/calculatorModal.vue";
+import { useRouter } from "vue-router";
 
 const fruitStore = useFruitStore();
-const fruitsTaken = fruitStore.fruitsInCart;
-const totalPrice = ref(0);
+const router = useRouter();
+
+const totalPrice = ref("0");
+const customerPaidAmount = ref("0");
+const moneyToGiveBackToCustomer = ref("0");
+const moneyToGiveBackVisibility = ref(false);
+
 onMounted(() => {
-  for (let i = 0; i < fruitsTaken.length; i++) {
-    totalPrice.value += parseFloat(fruitsTaken[i].total);
-  }
-  totalPrice.value = totalPrice.value.toFixed(2);
+  calculateTotal();
 });
 
 const calculatorVisibility = ref(false);
 
-function makeCalculatorInvisible() {
+function calculateTotal() {
+  let accumulatedTotal = 0;
+  for (let i = 0; i < fruitStore.fruitsInCart.length; i++) {
+    accumulatedTotal += parseFloat(fruitStore.fruitsInCart[i].total);
+  }
+  totalPrice.value = accumulatedTotal.toFixed(2);
+}
+
+function makeCalculatorInvisible(data) {
   calculatorVisibility.value = false;
+  customerPaidAmount.value = parseFloat(data).toFixed(2);
+  if (parseFloat(customerPaidAmount.value) > parseFloat(totalPrice.value)) {
+    moneyToGiveBackVisibility.value = true;
+    moneyToGiveBackToCustomer.value = (
+      parseFloat(customerPaidAmount.value) - parseFloat(totalPrice.value)
+    ).toFixed(2);
+  }
+}
+
+function removeFruit(tradeId) {
+  let indexToRemove = null;
+  for (let i = 0; i < fruitStore.fruitsInCart.length; i++) {
+    if (fruitStore.fruitsInCart[i].tradeId == tradeId) {
+      indexToRemove = i;
+    }
+  }
+  fruitStore.fruitsInCart.splice(indexToRemove, 1);
+  calculateTotal();
+}
+
+function moveOnToNextTrade() {
+  fruitStore.tradeHistory.push(fruitStore.fruitsInCart);
+  fruitStore.fruitsInCart = [];
+  router.push({ name: "home" });
 }
 </script>
 
@@ -157,13 +219,14 @@ function makeCalculatorInvisible() {
   display: flex;
   margin: 0 0.5rem;
   justify-content: space-between;
-  padding: 1rem;
-  align-items: baseline;
+  padding: 1rem 0.5rem;
+  align-items: center;
   border-bottom: 1px solid rgb(196, 194, 194);
 }
 .name-gram-wrapper {
   display: flex;
   align-items: baseline;
+  flex: 1;
 }
 .fruit-name {
   font-size: 1.6rem;
@@ -174,6 +237,17 @@ function makeCalculatorInvisible() {
 }
 .fruit-price {
   font-size: 1.5rem;
+  flex: 1;
+  text-align: right;
+}
+
+.delete-svg-layout {
+  padding: 0 10px;
+}
+.delete-svg {
+  width: 30px;
+  stroke: red;
+  height: 30px;
 }
 
 .plus-button-layout {
@@ -190,10 +264,11 @@ function makeCalculatorInvisible() {
   align-items: center;
   border-radius: 10px;
   justify-items: center;
+  border: 3px green solid;
 }
 .plus-button {
   height: 2rem;
-  color: white;
+  color: rgb(255, 255, 255);
   border-radius: 8px;
   width: 2rem;
 }

@@ -4,11 +4,11 @@
     <div>輸入水果重量</div>
   </div>
   <div class="fruit-detail">
-    <div class="fruit-name">{{ fruitName }}</div>
+    <div class="fruit-name">{{ selectedFruit.name }}</div>
     <div class="fruit-price-wrapper">
       <div class="price-RM">RM</div>
-      <div class="price-number">{{ fruitPrice }}</div>
-      <div class="price-KG">/kg</div>
+      <div class="price-number">{{ selectedFruit.price }}</div>
+      <div class="price-KG">/{{ selectedFruit.measurement }}</div>
     </div>
   </div>
 
@@ -17,17 +17,17 @@
       <div class="gram-design">
         {{ calculatorComponent?.calculatorDisplayValue }}
       </div>
-      <div class="kg-word">kg</div>
+      <div class="measurement-word">{{ selectedFruit.measurement }}</div>
     </div>
   </calculator>
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 import BackButton from "../components/BackButton.vue";
 import { useRoute, useRouter } from "vue-router";
 import { useFruitStore } from "../stores/fruits";
-import { onMounted, nextTick } from "vue";
+
 import calculator from "../components/calculator.vue";
 
 const router = useRouter();
@@ -35,25 +35,32 @@ const router = useRouter();
 const calculatorComponent = ref(null);
 const fruitStore = useFruitStore();
 const route = useRoute();
-const fruitName = route.params.id;
-let fruitPrice = "";
+const fruitId = route.params.id;
 
-const fruits = fruitStore.fruitsForSale;
-for (let x = 0; x < fruits.length; x++) {
-  if (fruitName == fruits[x].name) {
-    fruitPrice = fruits[x].price;
+let selectedFruit = ref({});
+
+onMounted(() => {
+  const fruits = fruitStore.fruitsForSale;
+  for (let x = 0; x < fruits.length; x++) {
+    if (fruitId == fruits[x].id) {
+      selectedFruit.value = fruits[x];
+    }
   }
-}
+});
 
 function processCalculatorValue(data) {
   if (data == "" || parseFloat(data) == 0) {
     return;
   }
-  const priceOfGood = (parseFloat(data) * parseFloat(fruitPrice)).toFixed(2);
+  const priceOfGood = (
+    parseFloat(data) * parseFloat(selectedFruit.value.price)
+  ).toFixed(2);
+  let date = new Date();
   fruitStore.fruitsInCart.push({
-    name: fruitName,
-    kilogram: data,
+    ...selectedFruit.value,
+    measuredAmount: data,
     total: priceOfGood,
+    tradeId: date.getTime(),
   });
 
   router.push({ name: "cartPage" });
@@ -124,7 +131,7 @@ function processCalculatorValue(data) {
   overflow: hidden;
 }
 
-.kg-word {
+.measurement-word {
   height: 60px;
   display: grid;
   align-items: center;

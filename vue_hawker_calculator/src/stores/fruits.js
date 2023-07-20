@@ -45,23 +45,39 @@ export const useFruitStore = defineStore("fruits", () => {
 
   const fruitsInCart = ref([
     {
+      id: 1689777471127,
       name: "木瓜",
-      kilogram: "1.2",
-      total: "4",
+      price: "2.60",
+      measurement: "kg",
+      category: "普通",
+      measuredAmount: "2.30",
+      total: "10.20",
+      tradeId: 1689777471321,
     },
+
     {
+      id: 1689777471128,
       name: "白木薯",
-      kilogram: "2",
-      total: "5",
-    },
-    {
-      name: "香蕉",
-      kilogram: "2",
-      total: "5",
+      price: "4.00",
+      measurement: "kg",
+      category: "普通",
+      measuredAmount: "3",
+      total: "8.00",
+      tradeId: 1689777471562,
     },
   ]);
 
+  const tradeHistory = ref([]);
+
   const saleCategories = ref(["普通", "做生意", "最便宜"]);
 
-  return { fruitsForSale, fruitsInCart, saleCategories };
+  const measurementCategory = ref(["kg", "粒"]);
+
+  return {
+    fruitsForSale,
+    fruitsInCart,
+    saleCategories,
+    measurementCategory,
+    tradeHistory,
+  };
 });

@@ -47,7 +47,7 @@ function confirmAction(boolean) {
   width: min-content;
 }
 .box-word {
-  width: 300px;
+  width: 250px;
   font-size: 1.5rem;
   text-align: center;
   margin-top: 1rem;
@@ -56,6 +56,7 @@ function confirmAction(boolean) {
 .button-container {
   display: flex;
   justify-content: space-around;
+  margin-bottom: 1rem;
 }
 .confirm-button {
   width: 5rem;
