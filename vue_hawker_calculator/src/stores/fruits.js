@@ -17,18 +17,28 @@ export const useFruitStore = defineStore("fruits", () => {
       id: 1689777471127,
       name: "木瓜",
       price: "2.60",
+      measurement: "kg",
       category: "普通",
     },
     {
       id: 1689777471128,
       name: "白木薯",
       price: "4.00",
+      measurement: "kg",
       category: "普通",
     },
     {
       id: 1689777471129,
       name: "香蕉",
       price: "2.60",
+      measurement: "kg",
+      category: "最便宜",
+    },
+    {
+      id: 1689777471200,
+      name: "椰子",
+      price: "2.60",
+      measurement: "粒",
       category: "最便宜",
     },
   ]);

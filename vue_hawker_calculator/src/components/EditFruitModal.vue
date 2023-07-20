@@ -13,19 +13,44 @@
         name="fruitName"
       />
       <label class="pop-up-label" for="fruitPrice">价格:</label>
-      <div class="price">
-        <input
-          class="input-design price-input-design"
-          type="text"
-          id="fruitPrice"
-          v-model="fruitPrice"
-          name="fruitPrice"
-        />
+      <div class="price-layout">
+        <div class="price">
+          <input
+            class="price-input-design"
+            type="text"
+            id="fruitPrice"
+            v-model="fruitPrice"
+            name="fruitPrice"
+          />
+        </div>
+        <div class="price-measurement">
+          <div class="measurement-slash">/</div>
+          <div
+            class="measurement-dropdown"
+            @click="measurementDropdownSelected = !measurementDropdownSelected"
+          >
+            kg
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="currentColor"
+              class="chevron-up-svg"
+              :class="{ rotate: measurementDropdownSelected }"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M11.47 7.72a.75.75 0 011.06 0l7.5 7.5a.75.75 0 11-1.06 1.06L12 9.31l-6.97 6.97a.75.75 0 01-1.06-1.06l7.5-7.5z"
+                clip-rule="evenodd"
+              />
+            </svg>
+          </div>
+        </div>
       </div>
+
       <label class="category-dropdown-label pop-up-label">组:</label>
 
       <div
-        @click="dropdownSelected = !dropdownSelected"
+        @click="groupDropdownSelected = !groupDropdownSelected"
         class="category-dropdown-selected input-design"
       >
         <div>{{ currentSelectedCateogry }}</div>
@@ -35,7 +60,7 @@
             viewBox="0 0 24 24"
             fill="currentColor"
             class="chevron-up-svg"
-            :class="{ rotate: dropdownSelected }"
+            :class="{ rotate: groupDropdownSelected }"
           >
             <path
               fill-rule="evenodd"
@@ -45,9 +70,9 @@
           </svg>
         </div>
       </div>
-      <div class="dropdown-selection" v-if="dropdownSelected">
+      <div class="dropdown-selection" v-if="groupDropdownSelected">
         <div
-          v-for="selection in dropdownSelection"
+          v-for="selection in groupDropdownSelection"
           :key="selection"
           class="single-dropdown-selection"
           @click="categoryChanged(selection)"
@@ -80,9 +105,11 @@ const fruitName = ref("");
 const fruitPrice = ref("");
 const fruitStore = useFruitStore();
 
-const dropdownSelected = ref(false);
-const dropdownSelection = ref([]);
+const groupDropdownSelected = ref(false);
+const groupDropdownSelection = ref([]);
 const currentSelectedCateogry = ref("普通");
+
+const measurementDropdownSelected = ref(false);
 
 let selectedFruitId = ref(null);
 let fieldsIncorrect = ref(false);
@@ -99,17 +126,17 @@ onMounted(() => {
 });
 
 function reloadDropdownCategory() {
-  dropdownSelection.value = [];
+  groupDropdownSelection.value = [];
   for (let i = 0; i < fruitStore.saleCategories.length; i++) {
     if (currentSelectedCateogry.value != fruitStore.saleCategories[i]) {
-      dropdownSelection.value.push(fruitStore.saleCategories[i]);
+      groupDropdownSelection.value.push(fruitStore.saleCategories[i]);
     }
   }
 }
 
 function categoryChanged(selection) {
   currentSelectedCateogry.value = selection;
-  dropdownSelected.value = false;
+  groupDropdownSelected.value = false;
   reloadDropdownCategory();
 }
 
@@ -235,14 +262,15 @@ function refreshFieldsToDefault() {
   font-size: 1.2rem;
   border: none;
   width: 300px;
-
   box-shadow: 1px 1px 3px #555555;
 }
-.input-design:focus {
-  outline: none;
-}
 
+.price-layout {
+  display: flex;
+  width: 300px;
+}
 .price {
+  flex: 1;
   position: relative;
 }
 .price::before {
@@ -251,13 +279,48 @@ function refreshFieldsToDefault() {
   position: absolute;
   display: grid;
   height: 100%;
-  left: 5px;
   z-index: 10;
+  left: 5px;
   align-content: center;
 }
 
 .price-input-design {
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  padding-right: 1rem;
   padding-left: 3rem;
+  border-radius: 5px;
+  font-size: 1.2rem;
+  border: none;
+  width: 180px;
+  box-shadow: 1px 1px 3px #555555;
+}
+
+.price-measurement {
+  display: flex;
+  flex: 3;
+  font-size: 1.2rem;
+  width: min-content;
+}
+
+.measurement-slash {
+  padding: 0 5px;
+  font-size: 1.8rem;
+  margin: auto;
+  flex: 1;
+  display: flex;
+  justify-content: center;
+}
+.measurement-dropdown {
+  flex: 2;
+  width: 50px;
+  border-radius: 5px;
+  box-shadow: 1px 1px 3px #555555;
+  padding-left: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 5px;
 }
 
 .category-dropdown-selected {
