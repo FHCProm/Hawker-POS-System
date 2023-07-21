@@ -65,6 +65,16 @@ export const useFruitStore = defineStore("fruits", () => {
       total: "8.00",
       tradeId: 1689777471562,
     },
+    {
+      id: 1689777471128,
+      name: "apple",
+      price: "4.00",
+      measurement: "kg",
+      category: "最贵",
+      measuredAmount: "3",
+      total: "8.00",
+      tradeId: 1689777471111,
+    },
   ]);
 
   const tradeHistory = ref([]);

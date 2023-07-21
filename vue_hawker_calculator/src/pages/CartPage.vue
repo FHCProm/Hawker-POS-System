@@ -35,35 +35,40 @@
         </button>
       </div>
     </div>
-    <div
-      class="fruit-detail"
-      v-for="fruit in fruitStore.fruitsInCart"
-      :key="fruit"
-    >
-      <div class="name-gram-wrapper">
-        <div class="fruit-name">{{ fruit.name }}</div>
-        <div class="fruit-gram">
-          {{ fruit.measuredAmount }}{{ fruit.measurement }}
+
+    <div class="fruit-detail-category" v-for="category in filteredCategories">
+      {{ category }}
+      <div
+        class="fruit-detail"
+        v-for="fruit in sortedFruitTaken[category]"
+        :key="fruit"
+      >
+        <div class="name-gram-wrapper">
+          <div class="fruit-name">{{ fruit.name }}</div>
+          <div class="fruit-gram">
+            {{ fruit.measuredAmount }}{{ fruit.measurement }}
+          </div>
+        </div>
+        <div class="fruit-price">RM{{ fruit.total }}</div>
+        <div class="delete-svg-layout" @click="removeFruit(fruit.tradeId)">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.5"
+            stroke="currentColor"
+            class="delete-svg"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M9.75 9.75l4.5 4.5m0-4.5l-4.5 4.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+            />
+          </svg>
         </div>
       </div>
-      <div class="fruit-price">RM{{ fruit.total }}</div>
-      <div class="delete-svg-layout" @click="removeFruit(fruit.tradeId)">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke-width="1.5"
-          stroke="currentColor"
-          class="delete-svg"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            d="M9.75 9.75l4.5 4.5m0-4.5l-4.5 4.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-          />
-        </svg>
-      </div>
     </div>
+
     <router-link to="/">
       <div class="plus-button-layout">
         <div class="plus-button-wrapper">
@@ -131,16 +136,41 @@ import { useRouter } from "vue-router";
 const fruitStore = useFruitStore();
 const router = useRouter();
 
+const calculatorVisibility = ref(false);
+
 const totalPrice = ref("0");
 const customerPaidAmount = ref("0");
 const moneyToGiveBackToCustomer = ref("0");
 const moneyToGiveBackVisibility = ref(false);
 
+const fruitTaken = fruitStore.fruitsInCart;
+const sortedFruitTaken = ref({});
+const filteredCategories = ref([]);
+
 onMounted(() => {
   calculateTotal();
+  filterOutCategories();
+  createSortedFruitTakenBasedOnCategory();
 });
 
-const calculatorVisibility = ref(false);
+function filterOutCategories() {
+  let category = [];
+  for (let i = 0; i < fruitTaken.length; i++) {
+    category.push(fruitTaken[i].category);
+  }
+  filteredCategories.value = [...new Set(category)];
+}
+
+function createSortedFruitTakenBasedOnCategory() {
+  for (let i = 0; i < filteredCategories.value.length; i++) {
+    sortedFruitTaken.value[filteredCategories.value[i]] = [];
+    for (let x = 0; x < fruitTaken.length; x++) {
+      if (fruitTaken[x].category == filteredCategories.value[i]) {
+        sortedFruitTaken.value[filteredCategories.value[i]].push(fruitTaken[x]);
+      }
+    }
+  }
+}
 
 function calculateTotal() {
   let accumulatedTotal = 0;
@@ -153,7 +183,10 @@ function calculateTotal() {
 function makeCalculatorInvisible(data) {
   calculatorVisibility.value = false;
   customerPaidAmount.value = parseFloat(data).toFixed(2);
-  if (parseFloat(customerPaidAmount.value) > parseFloat(totalPrice.value)) {
+  if (
+    parseFloat(customerPaidAmount.value) > parseFloat(totalPrice.value) &&
+    totalPrice.value != "0.00"
+  ) {
     moneyToGiveBackVisibility.value = true;
     moneyToGiveBackToCustomer.value = (
       parseFloat(customerPaidAmount.value) - parseFloat(totalPrice.value)
@@ -169,6 +202,8 @@ function removeFruit(tradeId) {
     }
   }
   fruitStore.fruitsInCart.splice(indexToRemove, 1);
+  filterOutCategories();
+  createSortedFruitTakenBasedOnCategory();
   calculateTotal();
 }
 
@@ -215,9 +250,14 @@ function moveOnToNextTrade() {
   stroke: gray;
 }
 
+.fruit-detail-category {
+  margin-left: 0.5rem;
+  margin-right: 0.5rem;
+  margin-top: 1rem;
+}
+
 .fruit-detail {
   display: flex;
-  margin: 0 0.5rem;
   justify-content: space-between;
   padding: 1rem 0.5rem;
   align-items: center;
@@ -229,14 +269,14 @@ function moveOnToNextTrade() {
   flex: 1;
 }
 .fruit-name {
-  font-size: 1.6rem;
+  font-size: 1.5rem;
   padding-right: 10px;
 }
 .fruit-gram {
   font-size: 1rem;
 }
 .fruit-price {
-  font-size: 1.5rem;
+  font-size: 1.4rem;
   flex: 1;
   text-align: right;
 }
