@@ -3,12 +3,13 @@
     <div class="header">
       <div class="header-word">结账</div>
       <div class="header-button-wrapper">
-        <button class="header-button">
+        <button class="header-button" @click="bookmarkTransaction">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
             viewBox="0 0 24 24"
             class="star-svg"
+            :class="{ bookmarked: isBookmarked }"
           >
             <path
               stroke-linecap="round"
@@ -81,7 +82,7 @@
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
             viewBox="0 0 24 24"
-            stroke-width="3"
+            stroke-width="1.5"
             stroke="currentColor"
             class="plus-button"
           >
@@ -137,6 +138,7 @@ import { onMounted, ref } from "vue";
 import { useFruitStore } from "../stores/fruits";
 import calculatorModal from "../components/calculatorModal.vue";
 import { useRouter, useRoute } from "vue-router";
+import moment from "moment";
 
 const fruitStore = useFruitStore();
 const router = useRouter();
@@ -152,6 +154,9 @@ const moneyToGiveBackVisibility = ref(false);
 const fruitTaken = fruitStore.fruitsInCart;
 const sortedFruitTaken = ref({});
 const filteredCategories = ref([]);
+
+const isBookmarked = ref(false);
+const transactionIdExists = ref(undefined);
 
 onMounted(() => {
   calculateTotal();
@@ -221,9 +226,48 @@ function removeFruit(tradeId) {
 }
 
 function moveOnToNextTrade() {
-  fruitStore.tradeHistory.push(fruitStore.fruitsInCart);
+  if (transactionIdExists.value == undefined) {
+    fruitStore.tradeHistory.push({
+      transactionId: moment().valueOf(),
+      bookmarked: false,
+      total: totalPrice.value,
+      fruits: fruitStore.fruitsInCart,
+    });
+  }
   fruitStore.fruitsInCart = [];
   router.push({ name: "home" });
+}
+
+function bookmarkTransaction() {
+  isBookmarked.value = !isBookmarked.value;
+
+  if (fruitStore.fruitsInCart.length > 0) {
+    if (isBookmarked.value) {
+      let transactionTime = moment().valueOf();
+      transactionIdExists.value = transactionTime;
+
+      fruitStore.tradeHistory.push({
+        transactionId: transactionTime,
+        bookmarked: true,
+        total: totalPrice.value,
+        fruits: fruitStore.fruitsInCart,
+      });
+    }
+
+    if (isBookmarked.value == false) {
+      let indexToRemove = undefined;
+      for (let i = 0; i < fruitStore.tradeHistory.length; i++) {
+        if (
+          transactionIdExists.value == fruitStore.tradeHistory[i].transactionId
+        ) {
+          indexToRemove = i;
+        }
+      }
+      fruitStore.tradeHistory.splice(indexToRemove, 1);
+
+      transactionIdExists.value = undefined;
+    }
+  }
 }
 </script>
 
@@ -256,6 +300,9 @@ function moveOnToNextTrade() {
   width: 30px;
   height: 30px;
   fill: gray;
+}
+.bookmarked {
+  fill: rgb(252, 198, 2);
 }
 .history-svg {
   width: 30px;
@@ -329,15 +376,14 @@ function moveOnToNextTrade() {
   display: grid;
   width: 3rem;
   height: 3rem;
-  background: rgb(94, 249, 94);
+  background: rgb(193, 241, 110);
   align-items: center;
   border-radius: 10px;
   justify-items: center;
-  border: 3px green solid;
 }
 .plus-button {
   height: 2rem;
-  color: rgb(255, 255, 255);
+  color: black;
   border-radius: 8px;
   width: 2rem;
 }
