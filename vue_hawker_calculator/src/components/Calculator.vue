@@ -35,12 +35,18 @@ const emit = defineEmits(["dataReady"]);
 
 defineExpose({
   calculatorDisplayValue,
+  prefillDisplayValue,
 });
 
 onMounted(() => {
   const calculatorWidth = calculatorElement.value.clientWidth;
   calculatorElement.value.style.height = `${calculatorWidth}px`;
 });
+
+function prefillDisplayValue(number) {
+  calculatorDisplayValue.value = number;
+  noNumberInCalculator = false;
+}
 
 function appendNumber(number) {
   navigator.vibrate(40);

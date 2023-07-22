@@ -17,7 +17,7 @@
         <div class="price">
           <input
             class="price-input-design"
-            type="text"
+            type="number"
             id="fruitPrice"
             v-model="fruitPrice"
             name="fruitPrice"

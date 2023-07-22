@@ -31,7 +31,10 @@ onMounted(() => {
 });
 
 function goToDetails(fruitId) {
-  router.push({ name: "fruitDetail", params: { id: fruitId } });
+  router.push({
+    name: "fruitDetail",
+    params: { id: fruitId, pageBeforeThis: "Landing" },
+  });
 }
 
 function sortFruit(category) {

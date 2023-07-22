@@ -17,7 +17,7 @@
             />
           </svg>
         </button>
-        <button class="header-button">
+        <button class="header-button" @click="router.push('/historyPage')">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
@@ -42,14 +42,19 @@
         class="fruit-detail"
         v-for="fruit in sortedFruitTaken[category]"
         :key="fruit"
+        :class="{
+          'fruit-detail-FadeIn': fruit.tradeId == route.params.newTradeId,
+        }"
       >
-        <div class="name-gram-wrapper">
-          <div class="fruit-name">{{ fruit.name }}</div>
-          <div class="fruit-gram">
-            {{ fruit.measuredAmount }}{{ fruit.measurement }}
+        <div class="details-price-layout" @click="editFruit(fruit.tradeId)">
+          <div class="name-gram-wrapper">
+            <div class="fruit-name">{{ fruit.name }}</div>
+            <div class="fruit-gram">
+              {{ fruit.measuredAmount }}{{ fruit.measurement }}
+            </div>
           </div>
+          <div class="fruit-price">RM{{ fruit.total }}</div>
         </div>
-        <div class="fruit-price">RM{{ fruit.total }}</div>
         <div class="delete-svg-layout" @click="removeFruit(fruit.tradeId)">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -131,10 +136,11 @@
 import { onMounted, ref } from "vue";
 import { useFruitStore } from "../stores/fruits";
 import calculatorModal from "../components/calculatorModal.vue";
-import { useRouter } from "vue-router";
+import { useRouter, useRoute } from "vue-router";
 
 const fruitStore = useFruitStore();
 const router = useRouter();
+const route = useRoute();
 
 const calculatorVisibility = ref(false);
 
@@ -192,6 +198,13 @@ function makeCalculatorInvisible(data) {
       parseFloat(customerPaidAmount.value) - parseFloat(totalPrice.value)
     ).toFixed(2);
   }
+}
+
+function editFruit(tradeId) {
+  router.push({
+    name: "fruitDetail",
+    params: { id: tradeId, pageBeforeThis: "Cart" },
+  });
 }
 
 function removeFruit(tradeId) {
@@ -263,10 +276,26 @@ function moveOnToNextTrade() {
   align-items: center;
   border-bottom: 1px solid rgb(196, 194, 194);
 }
+
+.fruit-detail-FadeIn {
+  animation: fadeIn 1.5s forwards;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+.details-price-layout {
+  display: flex;
+  flex: 1;
+}
 .name-gram-wrapper {
   display: flex;
   align-items: baseline;
-  flex: 1;
 }
 .fruit-name {
   font-size: 1.5rem;

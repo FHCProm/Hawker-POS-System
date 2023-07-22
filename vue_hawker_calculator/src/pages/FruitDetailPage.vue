@@ -1,9 +1,9 @@
 <template>
   <div class="header">
-    <BackButton back-path="/"></BackButton>
+    <BackButton :back-path="backPath"></BackButton>
     <div>輸入水果重量</div>
   </div>
-  <div class="fruit-detail">
+  <div class="fruit-detail" :style="{ background: fruitDetailBackgroundColor }">
     <div class="fruit-name">{{ selectedFruit.name }}</div>
     <div class="fruit-price-wrapper">
       <div class="price-RM">RM</div>
@@ -12,7 +12,11 @@
     </div>
   </div>
 
-  <calculator ref="calculatorComponent" @data-ready="processCalculatorValue">
+  <calculator
+    ref="calculatorComponent"
+    :display-value-set="selectedFruit.measuredAmount"
+    @data-ready="processCalculatorValue"
+  >
     <div class="gram-design-wrapper">
       <div class="gram-design">
         {{ calculatorComponent?.calculatorDisplayValue }}
@@ -36,14 +40,33 @@ const calculatorComponent = ref(null);
 const fruitStore = useFruitStore();
 const route = useRoute();
 const fruitId = route.params.id;
+const pageBeforeThis = route.params.pageBeforeThis;
+const fruitDetailBackgroundColor = ref("rgb(144, 197, 235)");
+const backPath = ref("/");
+const currentTradeId = ref(0);
 
 let selectedFruit = ref({});
 
 onMounted(() => {
-  const fruits = fruitStore.fruitsForSale;
-  for (let x = 0; x < fruits.length; x++) {
-    if (fruitId == fruits[x].id) {
-      selectedFruit.value = fruits[x];
+  if (pageBeforeThis == "Landing") {
+    const fruits = fruitStore.fruitsForSale;
+    for (let x = 0; x < fruits.length; x++) {
+      if (fruitId == fruits[x].id) {
+        selectedFruit.value = fruits[x];
+      }
+    }
+  }
+  if (pageBeforeThis == "Cart") {
+    fruitDetailBackgroundColor.value = "rgb(235, 199, 144)";
+    backPath.value = "/cartPage/0";
+    let fruitsTaken = fruitStore.fruitsInCart;
+    for (let x = 0; x < fruitsTaken.length; x++) {
+      if (Number(fruitId) == fruitsTaken[x].tradeId) {
+        selectedFruit.value = fruitsTaken[x];
+        calculatorComponent.value.prefillDisplayValue(
+          selectedFruit.value.measuredAmount
+        );
+      }
     }
   }
 });
@@ -55,15 +78,32 @@ function processCalculatorValue(data) {
   const priceOfGood = (
     parseFloat(data) * parseFloat(selectedFruit.value.price)
   ).toFixed(2);
-  let date = new Date();
-  fruitStore.fruitsInCart.push({
-    ...selectedFruit.value,
-    measuredAmount: data,
-    total: priceOfGood,
-    tradeId: date.getTime(),
-  });
 
-  router.push({ name: "cartPage" });
+  if (pageBeforeThis == "Landing") {
+    let date = new Date();
+    currentTradeId.value = date.getTime();
+    fruitStore.fruitsInCart.push({
+      ...selectedFruit.value,
+      measuredAmount: data,
+      total: priceOfGood,
+      tradeId: currentTradeId.value,
+    });
+  }
+  if (pageBeforeThis == "Cart") {
+    let fruitsTaken = fruitStore.fruitsInCart;
+    for (let x = 0; x < fruitsTaken.length; x++) {
+      if (Number(fruitId) == fruitsTaken[x].tradeId) {
+        fruitsTaken[x].total = priceOfGood;
+        fruitsTaken[x].measuredAmount = data;
+        currentTradeId.value = fruitsTaken[x].tradeId;
+      }
+    }
+  }
+
+  router.push({
+    name: "cartPage",
+    params: { newTradeId: currentTradeId.value },
+  });
 }
 </script>
 
