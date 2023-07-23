@@ -139,6 +139,7 @@ import { useFruitStore } from "../stores/fruits";
 import calculatorModal from "../components/calculatorModal.vue";
 import { useRouter, useRoute } from "vue-router";
 import moment from "moment";
+import { deepCopyArray } from "../assets/utility";
 
 const fruitStore = useFruitStore();
 const router = useRouter();
@@ -226,12 +227,15 @@ function removeFruit(tradeId) {
 }
 
 function moveOnToNextTrade() {
-  if (transactionIdExists.value == undefined) {
+  if (
+    transactionIdExists.value == undefined &&
+    fruitStore.fruitsInCart.length != 0
+  ) {
     fruitStore.tradeHistory.push({
       transactionId: moment().valueOf(),
       bookmarked: false,
       total: totalPrice.value,
-      fruits: fruitStore.fruitsInCart,
+      fruits: deepCopyArray(fruitStore.fruitsInCart),
     });
   }
   fruitStore.fruitsInCart = [];
@@ -241,7 +245,7 @@ function moveOnToNextTrade() {
 function bookmarkTransaction() {
   isBookmarked.value = !isBookmarked.value;
 
-  if (fruitStore.fruitsInCart.length > 0) {
+  if (fruitStore.fruitsInCart.length != 0) {
     if (isBookmarked.value) {
       let transactionTime = moment().valueOf();
       transactionIdExists.value = transactionTime;
@@ -250,7 +254,7 @@ function bookmarkTransaction() {
         transactionId: transactionTime,
         bookmarked: true,
         total: totalPrice.value,
-        fruits: fruitStore.fruitsInCart,
+        fruits: deepCopyArray(fruitStore.fruitsInCart),
       });
     }
 

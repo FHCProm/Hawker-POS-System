@@ -8,7 +8,7 @@
     v-for="history in accumulatedCartHistory"
     :key="history"
   >
-    <div class="history-row">
+    <div class="history-row" :class="{ 'yellow-border': history.bookmarked }">
       <div class="history-first-row">
         <div class="first-row-time">
           {{ timeFromNow(history.transactionId) }}
@@ -50,13 +50,14 @@ import BackButton from "../components/BackButton.vue";
 import moment from "moment";
 import { useFruitStore } from "../stores/fruits";
 import { useRoute, useRouter } from "vue-router";
+import { deepCopyArray } from "../assets/utility";
 
 const fruitStore = useFruitStore();
-const accumulatedCartHistory = fruitStore.tradeHistory;
+let accumulatedCartHistory = fruitStore.tradeHistory;
 const router = useRouter();
 
 function populateCartPage(transactionHistory) {
-  fruitStore.fruitsInCart = transactionHistory;
+  fruitStore.fruitsInCart = deepCopyArray(transactionHistory);
   router.push({
     name: "cartPage",
     params: { newTradeId: 0 },
@@ -138,7 +139,11 @@ function populateCartPage(transactionHistory) {
 //   },
 // ]);
 
-onMounted(() => {});
+onMounted(() => {
+  if (accumulatedCartHistory.length != 0) {
+    arrangeHistory();
+  }
+});
 function timeFromNow(data) {
   return moment(data).fromNow();
 }
@@ -150,6 +155,29 @@ function toggleBookmark(id) {
         !fruitStore.tradeHistory[i].bookmarked;
     }
   }
+}
+
+function arrangeHistory() {
+  let historyCopy = deepCopyArray(fruitStore.tradeHistory);
+  accumulatedCartHistory.splice(0, accumulatedCartHistory.length);
+
+  let arrangedVersion = [];
+  let biggestUnix = historyCopy[0].transactionId;
+
+  while (historyCopy.length != 0) {
+    let indexToRemove = 0;
+    for (let i = 0; i < historyCopy.length; i++) {
+      if (historyCopy[i].transactionId > biggestUnix) {
+        biggestUnix = historyCopy[i].transactionHistory;
+        indexToRemove = i;
+      }
+    }
+    accumulatedCartHistory.push(historyCopy[indexToRemove]);
+    console.log(historyCopy[indexToRemove]);
+    historyCopy.splice(indexToRemove, 1);
+  }
+
+  return arrangedVersion;
 }
 </script>
 
@@ -172,6 +200,9 @@ function toggleBookmark(id) {
 .history-row {
   border: 1px solid rgb(196, 194, 194);
   padding: 0.2rem;
+}
+.yellow-border {
+  border: 1px solid rgb(255, 158, 2);
 }
 
 .history-first-row {
@@ -210,7 +241,7 @@ function toggleBookmark(id) {
 
 .total-price {
   font-weight: bold;
-  margin-top: 0.3rem;
+  margin-top: 0.5rem;
   text-align: right;
 }
 </style>
