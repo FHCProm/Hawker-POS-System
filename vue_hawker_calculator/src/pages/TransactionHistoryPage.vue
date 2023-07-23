@@ -5,7 +5,7 @@
   </div>
   <div
     class="history-container"
-    v-for="history in accumulatedCartHistory"
+    v-for="history in fruitStore.tradeHistory"
     :key="history"
   >
     <div class="history-row" :class="{ 'yellow-border': history.bookmarked }">
@@ -45,7 +45,7 @@
 </template>
 
 <script setup>
-import { onMounted, ref } from "vue";
+import { onBeforeMount, onMounted, ref } from "vue";
 import BackButton from "../components/BackButton.vue";
 import moment from "moment";
 import { useFruitStore } from "../stores/fruits";
@@ -53,7 +53,7 @@ import { useRoute, useRouter } from "vue-router";
 import { deepCopyArray } from "../assets/utility";
 
 const fruitStore = useFruitStore();
-let accumulatedCartHistory = fruitStore.tradeHistory;
+
 const router = useRouter();
 
 function populateCartPage(transactionHistory) {
@@ -139,11 +139,12 @@ function populateCartPage(transactionHistory) {
 //   },
 // ]);
 
-onMounted(() => {
-  if (accumulatedCartHistory.length != 0) {
-    arrangeHistory();
+onBeforeMount(() => {
+  if (fruitStore.tradeHistory.length != 0) {
+    fruitStore.tradeHistory = arrangeHistory();
   }
 });
+
 function timeFromNow(data) {
   return moment(data).fromNow();
 }
@@ -159,24 +160,54 @@ function toggleBookmark(id) {
 
 function arrangeHistory() {
   let historyCopy = deepCopyArray(fruitStore.tradeHistory);
-  accumulatedCartHistory.splice(0, accumulatedCartHistory.length);
-
+  fruitStore.tradeHistory.splice(0, fruitStore.tradeHistory.length);
   let arrangedVersion = [];
-  let biggestUnix = historyCopy[0].transactionId;
 
-  while (historyCopy.length != 0) {
+  //filter out bookmarks
+  let bookmarkedHistory = [];
+  let indexesToRemove = [];
+  for (let i = 0; i < historyCopy.length; i++) {
+    if (historyCopy[i].bookmarked) {
+      indexesToRemove.push(i);
+      bookmarkedHistory.push(historyCopy[i]);
+    }
+  }
+
+  console.log(historyCopy.length);
+  for (let i = indexesToRemove.length - 1; i >= 0; i--) {
+    historyCopy.splice(indexesToRemove[i], 1);
+  }
+
+  console.log(historyCopy.length);
+
+  while (bookmarkedHistory.length != 0) {
     let indexToRemove = 0;
-    for (let i = 0; i < historyCopy.length; i++) {
-      if (historyCopy[i].transactionId > biggestUnix) {
-        biggestUnix = historyCopy[i].transactionHistory;
+    let biggestUnix = bookmarkedHistory[0].transactionId;
+    for (let i = 0; i < bookmarkedHistory.length; i++) {
+      if (bookmarkedHistory[i].transactionId > biggestUnix) {
+        biggestUnix = bookmarkedHistory[i].transactionId;
         indexToRemove = i;
       }
     }
-    accumulatedCartHistory.push(historyCopy[indexToRemove]);
-    console.log(historyCopy[indexToRemove]);
-    historyCopy.splice(indexToRemove, 1);
+    arrangedVersion.push(bookmarkedHistory[indexToRemove]);
+    bookmarkedHistory.splice(indexToRemove, 1);
   }
 
+  //after removed the bookmarked history , we proceed with non-bookmarked ones
+
+  while (historyCopy.length != 0) {
+    let indexToRemove = 0;
+    let biggestUnix = historyCopy[0].transactionId;
+    for (let i = 0; i < historyCopy.length; i++) {
+      if (historyCopy[i].transactionId > biggestUnix) {
+        biggestUnix = historyCopy[i].transactionId;
+        indexToRemove = i;
+      }
+    }
+    arrangedVersion.push(historyCopy[indexToRemove]);
+    historyCopy.splice(indexToRemove, 1);
+  }
+  console.log(arrangedVersion);
   return arrangedVersion;
 }
 </script>
