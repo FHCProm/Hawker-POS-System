@@ -19,11 +19,33 @@
 
 // Wait for the deviceready event before using any of Cordova's device APIs.
 // See https://cordova.apache.org/docs/en/latest/cordova/events/events.html#deviceready
-document.addEventListener('deviceready', onDeviceReady, false);
+document.addEventListener("deviceready", onDeviceReady, false);
 
 function onDeviceReady() {
-    // Cordova is now initialized. Have fun!
+  // Cordova is now initialized. Have fun!
 
-    console.log('Running cordova-' + cordova.platformId + '@' + cordova.version);
-    document.getElementById('deviceready').classList.add('ready');
+  console.log("Running cordova-" + cordova.platformId + "@" + cordova.version);
+  document.getElementById("deviceready").classList.add("ready");
+
+  console.log(cordova.file);
+
+  //   window.requestFileSystem(
+  //     LocalFileSystem.PERSISTENT,
+  //     0,
+  //     function (fs) {
+  //       console.log("file system open: " + fs.name);
+  //       fs.root.getFile(
+  //         "fruitBook.json",
+  //         { create: true, exclusive: false },
+  //         function (fileEntry) {
+  //           console.log("fileEntry is file?" + fileEntry.isFile.toString());
+  //           // fileEntry.name == 'someFile.txt'
+  //           // fileEntry.fullPath == '/someFile.txt'
+  //           writeFile(fileEntry, null);
+  //         },
+  //         onErrorCreateFile
+  //       );
+  //     },
+  //     onErrorLoadFs
+  //   );
 }

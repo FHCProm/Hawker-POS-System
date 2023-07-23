@@ -173,12 +173,9 @@ function arrangeHistory() {
     }
   }
 
-  console.log(historyCopy.length);
   for (let i = indexesToRemove.length - 1; i >= 0; i--) {
     historyCopy.splice(indexesToRemove[i], 1);
   }
-
-  console.log(historyCopy.length);
 
   while (bookmarkedHistory.length != 0) {
     let indexToRemove = 0;

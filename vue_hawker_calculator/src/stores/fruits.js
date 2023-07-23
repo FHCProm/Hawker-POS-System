@@ -81,11 +81,25 @@ export const useFruitStore = defineStore("fruits", () => {
 
   const measurementCategory = ref(["kg", "粒"]);
 
+  function writeToFile() {
+    console.log(cordova);
+    window.resolveLocalFileSystemURL(
+      window.cordova.file.dataDirectory,
+      function (dirEntry) {
+        console.log("file system open: " + dirEntry.name);
+        var isAppend = true;
+        createFile(dirEntry, "fileToAppend.txt", isAppend);
+      },
+      onErrorLoadFs
+    );
+  }
+
   return {
     fruitsForSale,
     fruitsInCart,
     saleCategories,
     measurementCategory,
     tradeHistory,
+    writeToFile,
   };
 });

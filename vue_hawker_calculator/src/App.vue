@@ -4,9 +4,14 @@
 
 <script setup>
 import { onMounted } from "vue";
-window.screen.orientation.lock("portrait");
 
-onMounted(() => {});
+onMounted(() => {
+  screen.orientation.lock("portrait");
+
+  const script = document.createElement("script");
+  script.src = "cordova.js";
+  document.body.appendChild(script);
+});
 </script>
 
 <style scoped></style>

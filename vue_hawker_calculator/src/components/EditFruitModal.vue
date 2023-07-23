@@ -230,6 +230,7 @@ function saveFields() {
           currentSelectedMeasurementDropdownCategory.value;
       }
     }
+    fruitStore.writeToFile();
   }
 
   emit("readyForReload");
