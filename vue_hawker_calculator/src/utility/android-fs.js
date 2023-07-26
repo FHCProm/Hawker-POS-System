@@ -74,7 +74,8 @@ function readFile(fileEntry, myFunction) {
     reader.onloadend = function () {
       console.log("Successful file read: ");
       if (this.result == "") {
-        console.log("file not created yet");
+        myFunction(JSON.parse("[]"));
+        return;
       }
       myFunction(JSON.parse(this.result));
 

@@ -1,15 +1,13 @@
 <template>
-  <div v-if="fruitStore.dataIsLoadedFromFiles">
-    <div class="header">
-      <div>选择水果</div>
-      <cart-with-number></cart-with-number>
-    </div>
-    <top-menu-bar @changed-category="setCategory"></top-menu-bar>
-    <div class="selection-wrapper">
-      <div v-for="fruit in sortedFruit" :key="fruit" class="one">
-        <div class="fruit-name-layout" @click="goToDetails(`${fruit.id}`)">
-          {{ fruit.name }}
-        </div>
+  <div class="header">
+    <div>选择水果</div>
+    <cart-with-number></cart-with-number>
+  </div>
+  <top-menu-bar @changed-category="setCategory"></top-menu-bar>
+  <div class="selection-wrapper">
+    <div v-for="fruit in sortedFruit" :key="fruit" class="one">
+      <div class="fruit-name-layout" @click="goToDetails(`${fruit.id}`)">
+        {{ fruit.name }}
       </div>
     </div>
   </div>

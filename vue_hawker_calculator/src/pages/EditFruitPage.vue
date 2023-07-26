@@ -27,18 +27,14 @@
   </div>
   <div
     class="fruit-spec-layout"
-    v-for="category in categoryForTheTable"
+    v-for="category in Object.keys(TableData)"
     :key="category"
   >
     <div class="fruit-category">
       <div class="category-word">{{ category }}</div>
       <div class="black-line"></div>
     </div>
-    <div
-      class="fruit-specs"
-      v-for="fruit in dataForTheTable[category]"
-      :key="fruit"
-    >
+    <div class="fruit-specs" v-for="fruit in TableData[category]" :key="fruit">
       <div class="name-price-layout" @click="changePopUpVisibility(fruit.id)">
         <div class="fruit-name">{{ fruit.name }}</div>
         <div class="fruit-price">
@@ -64,10 +60,7 @@
     </div>
   </div>
 
-  <EditFruitModal
-    ref="popUpModal"
-    @ready-for-reload="reloadTables"
-  ></EditFruitModal>
+  <EditFruitModal ref="popUpModal"></EditFruitModal>
   <ConfirmationBox
     v-if="confirmationBoxVisibility"
     @confirmation-done="deleteFruit"
@@ -75,7 +68,7 @@
 </template>
 
 <script setup>
-import { onMounted, ref } from "vue";
+import { computed, onMounted, ref } from "vue";
 import EditFruitModal from "../components/EditFruitModal.vue";
 import { useFruitStore } from "../stores/fruits";
 import BackButton from "../components/BackButton.vue";
@@ -89,41 +82,33 @@ let dataForTheTable = ref({});
 let categoryForTheTable = ref([]);
 let selectedIdForConfirmationBox = ref(null);
 
-onMounted(() => {
-  getDataForTheTable();
-  removeEmptyCategory();
-});
+onMounted(() => {});
 
-function getDataForTheTable() {
+const TableData = computed(() => {
+  let data = {};
   for (let i = 0; i < fruitStore.saleCategories.length; i++) {
-    dataForTheTable.value[fruitStore.saleCategories[i]] = [];
+    data[fruitStore.saleCategories[i]] = [];
     for (let x = 0; x < fruitStore.fruitsForSale.length; x++) {
-      if (fruitStore.fruitsForSale[x].category == fruitStore.saleCategories[i])
-        dataForTheTable.value[fruitStore.saleCategories[i]].push(
-          fruitStore.fruitsForSale[x]
-        );
+      if (
+        fruitStore.fruitsForSale[x].category == fruitStore.saleCategories[i]
+      ) {
+        data[fruitStore.saleCategories[i]].push(fruitStore.fruitsForSale[x]);
+      }
     }
   }
-}
-
-function removeEmptyCategory() {
-  categoryForTheTable.value = [];
-  for (let i = 0; i < fruitStore.saleCategories.length; i++) {
-    if (dataForTheTable.value[fruitStore.saleCategories[i]].length > 0) {
-      categoryForTheTable.value.push(fruitStore.saleCategories[i]);
+  let filteredData = {};
+  for (let prop in data) {
+    if (data[prop].length > 0) {
+      filteredData[prop] = data[prop];
     }
   }
-}
+  return filteredData;
+});
 
 function changePopUpVisibility(id) {
   popUpModal.value.selectedFruitId = id;
   popUpModal.value.fillUpFields();
   popUpModal.value.popUpVisibility = true;
-}
-
-function reloadTables() {
-  getDataForTheTable();
-  removeEmptyCategory();
 }
 
 function confirmUserAction(id) {
@@ -144,7 +129,6 @@ function deleteFruit(decision) {
       }
     }
     fruitStore.fruitsForSale.splice(indexToRemove, 1);
-    reloadTables();
   }
 }
 </script>

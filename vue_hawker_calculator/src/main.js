@@ -8,9 +8,6 @@ const script = document.createElement("script");
 script.src = "cordova.js";
 document.body.appendChild(script);
 
-document.addEventListener("deviceready", onDeviceReady, false);
-function onDeviceReady() {}
-
 const app = createApp(App);
 
 app.use(createPinia());

@@ -17,15 +17,15 @@ onMounted(() => {
   // document.body.appendChild(script);
 });
 
-document.addEventListener("deviceready", onDeviceReady, false);
-function onDeviceReady() {
-  readFromFile((variable) => {
-    fruitStore.fruitsForSale = variable;
-    fruitStore.dataIsLoadedFromFiles = true;
-  });
+// document.addEventListener("deviceready", onDeviceReady, false);
+// function onDeviceReady() {
+//   readFromFile((variable) => {
+//     fruitStore.fruitsForSale = variable;
+//     fruitStore.dataIsLoadedFromFiles = true;
+//   });
 
-  console.log("device is ready");
-}
+//   console.log("device is ready");
+// }
 </script>
 
 <style scoped></style>

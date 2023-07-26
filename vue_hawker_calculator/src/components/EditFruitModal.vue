@@ -132,8 +132,6 @@ const currentSelectedMeasurementDropdownCategory = ref("kg");
 let selectedFruitId = ref(null);
 let fieldsIncorrect = ref(false);
 
-const emit = defineEmits(["readyForReload"]);
-
 defineExpose({
   popUpVisibility,
   selectedFruitId,
@@ -232,8 +230,7 @@ function saveFields() {
       }
     }
   }
-  writeToFile(JSON.stringify(fruitStore.fruitsForSale));
-  emit("readyForReload");
+  // writeToFile(JSON.stringify(fruitStore.fruitsForSale));
 
   popUpVisibility.value = false;
 }
