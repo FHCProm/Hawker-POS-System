@@ -2,43 +2,37 @@ import { ref, computed } from "vue";
 import { defineStore } from "pinia";
 
 export const useFruitStore = defineStore("fruits", () => {
-  // const count = ref(0)
-  // const doubleCount = computed(() => count.value * 2)
-  // function increment() {
-  //   count.value++
-  // }
-
-  // return { count, doubleCount, increment }
+  const dataIsLoadedFromFiles = ref(false);
 
   const fruitsForSale = ref([
-    {
-      id: 1689777471127,
-      name: "木瓜",
-      price: "2.60",
-      measurement: "kg",
-      category: "普通",
-    },
-    {
-      id: 1689777471128,
-      name: "白木薯",
-      price: "4.00",
-      measurement: "kg",
-      category: "普通",
-    },
-    {
-      id: 1689777471129,
-      name: "香蕉",
-      price: "2.60",
-      measurement: "kg",
-      category: "最便宜",
-    },
-    {
-      id: 1689777471200,
-      name: "椰子",
-      price: "2.60",
-      measurement: "粒",
-      category: "最便宜",
-    },
+    // {
+    //   id: 1689777471127,
+    //   name: "木瓜",
+    //   price: "2.60",
+    //   measurement: "kg",
+    //   category: "普通",
+    // },
+    // {
+    //   id: 1689777471128,
+    //   name: "白木薯",
+    //   price: "4.00",
+    //   measurement: "kg",
+    //   category: "普通",
+    // },
+    // {
+    //   id: 1689777471129,
+    //   name: "香蕉",
+    //   price: "2.60",
+    //   measurement: "kg",
+    //   category: "最便宜",
+    // },
+    // {
+    //   id: 1689777471200,
+    //   name: "椰子",
+    //   price: "2.60",
+    //   measurement: "粒",
+    //   category: "最便宜",
+    // },
   ]);
 
   const fruitsInCart = ref([
@@ -81,25 +75,12 @@ export const useFruitStore = defineStore("fruits", () => {
 
   const measurementCategory = ref(["kg", "粒"]);
 
-  function writeToFile() {
-    console.log(cordova);
-    window.resolveLocalFileSystemURL(
-      window.cordova.file.dataDirectory,
-      function (dirEntry) {
-        console.log("file system open: " + dirEntry.name);
-        var isAppend = true;
-        createFile(dirEntry, "fileToAppend.txt", isAppend);
-      },
-      onErrorLoadFs
-    );
-  }
-
   return {
+    dataIsLoadedFromFiles,
     fruitsForSale,
     fruitsInCart,
     saleCategories,
     measurementCategory,
     tradeHistory,
-    writeToFile,
   };
 });

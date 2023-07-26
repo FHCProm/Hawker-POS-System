@@ -139,7 +139,7 @@ import { useFruitStore } from "../stores/fruits";
 import calculatorModal from "../components/calculatorModal.vue";
 import { useRouter, useRoute } from "vue-router";
 import moment from "moment";
-import { deepCopyArray } from "../assets/utility";
+import { deepCopyArray } from "../utility/array-helper";
 
 const fruitStore = useFruitStore();
 const router = useRouter();

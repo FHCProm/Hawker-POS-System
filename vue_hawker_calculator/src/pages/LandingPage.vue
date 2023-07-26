@@ -1,20 +1,22 @@
 <template>
-  <div class="header">
-    <div>选择水果</div>
-    <cart-with-number></cart-with-number>
-  </div>
-  <top-menu-bar @changed-category="sortFruit"></top-menu-bar>
-  <div class="selection-wrapper">
-    <div v-for="fruit in sortedFruits" :key="fruit" class="one">
-      <div class="fruit-name-layout" @click="goToDetails(`${fruit.id}`)">
-        {{ fruit.name }}
+  <div v-if="fruitStore.dataIsLoadedFromFiles">
+    <div class="header">
+      <div>选择水果</div>
+      <cart-with-number></cart-with-number>
+    </div>
+    <top-menu-bar @changed-category="setCategory"></top-menu-bar>
+    <div class="selection-wrapper">
+      <div v-for="fruit in sortedFruit" :key="fruit" class="one">
+        <div class="fruit-name-layout" @click="goToDetails(`${fruit.id}`)">
+          {{ fruit.name }}
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, watch, isReactive, computed } from "vue";
 import { useFruitStore } from "../stores/fruits";
 import { useRouter } from "vue-router";
 import TopMenuBar from "../components/TopMenuBar.vue";
@@ -22,13 +24,11 @@ import CartWithNumber from "../components/CartWithNumber.vue";
 
 const fruitStore = useFruitStore();
 
-const fruits = fruitStore.fruitsForSale;
-const sortedFruits = ref([]);
+const currentCategory = ref("普通");
+
 const router = useRouter();
 
-onMounted(() => {
-  sortFruit();
-});
+onMounted(() => {});
 
 function goToDetails(fruitId) {
   router.push({
@@ -37,15 +37,19 @@ function goToDetails(fruitId) {
   });
 }
 
-function sortFruit(category) {
-  //topMenuBar.value.selectedCategory;
-  sortedFruits.value = [];
-  for (let i = 0; i < fruits.length; i++) {
-    if (fruits[i].category == category) {
-      sortedFruits.value.push(fruits[i]);
+function setCategory(category) {
+  currentCategory.value = category;
+}
+
+const sortedFruit = computed(() => {
+  let fruits = [];
+  for (let i = 0; i < fruitStore.fruitsForSale.length; i++) {
+    if (fruitStore.fruitsForSale[i].category == currentCategory.value) {
+      fruits.push(fruitStore.fruitsForSale[i]);
     }
   }
-}
+  return fruits;
+});
 </script>
 
 <style scoped>

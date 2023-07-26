@@ -51,9 +51,9 @@ const selectedCategory = ref("普通");
 const emit = defineEmits(["changedCategory"]);
 
 onMounted(() => {
-  nextTick(() => {
-    emit("changedCategory", selectedCategory.value);
-  });
+  // nextTick(() => {
+  //   emit("changedCategory", selectedCategory.value);
+  // });
 
   const mc = new Hammer.Manager(categoryBar.value);
   mc.add(new Hammer.Swipe({ direction: Hammer.DIRECTION_ALL }));

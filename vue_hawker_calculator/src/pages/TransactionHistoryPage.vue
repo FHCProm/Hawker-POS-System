@@ -50,7 +50,7 @@ import BackButton from "../components/BackButton.vue";
 import moment from "moment";
 import { useFruitStore } from "../stores/fruits";
 import { useRoute, useRouter } from "vue-router";
-import { deepCopyArray } from "../assets/utility";
+import { deepCopyArray } from "../utility/array-helper";
 
 const fruitStore = useFruitStore();
 

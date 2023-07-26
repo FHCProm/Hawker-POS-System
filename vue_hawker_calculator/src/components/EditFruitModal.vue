@@ -113,6 +113,7 @@
 <script setup>
 import { onMounted, ref } from "vue";
 import { useFruitStore } from "../stores/fruits";
+import { writeToFile } from "../utility/android-fs";
 
 const popUpElement = ref(null);
 const popUpVisibility = ref(false);
@@ -230,9 +231,8 @@ function saveFields() {
           currentSelectedMeasurementDropdownCategory.value;
       }
     }
-    fruitStore.writeToFile();
   }
-
+  writeToFile(JSON.stringify(fruitStore.fruitsForSale));
   emit("readyForReload");
 
   popUpVisibility.value = false;
