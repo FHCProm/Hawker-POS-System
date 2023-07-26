@@ -230,7 +230,7 @@ function saveFields() {
       }
     }
   }
-  // writeToFile(JSON.stringify(fruitStore.fruitsForSale));
+  writeToFile(JSON.stringify(fruitStore.fruitsForSale));
 
   popUpVisibility.value = false;
 }

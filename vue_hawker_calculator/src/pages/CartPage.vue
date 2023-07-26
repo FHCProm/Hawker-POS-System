@@ -37,7 +37,10 @@
       </div>
     </div>
 
-    <div class="fruit-detail-category" v-for="category in filteredCategories">
+    <div
+      class="fruit-detail-category"
+      v-for="category in Object.keys(sortedFruitTaken)"
+    >
       {{ category }}
       <div
         class="fruit-detail"
@@ -115,7 +118,7 @@
       </button>
     </div>
 
-    <div class="calculate-change" v-if="moneyToGiveBackVisibility">
+    <div class="calculate-change" v-if="mathematicDisplay">
       <div class="change-first-row-label">收到的钱：</div>
       <div class="change-first-row-value">{{ customerPaidAmount }}</div>
       <div class="change-second-row-label">水果价钱：</div>
@@ -134,7 +137,7 @@
 </template>
 
 <script setup>
-import { onMounted, ref } from "vue";
+import { computed, onMounted, ref } from "vue";
 import { useFruitStore } from "../stores/fruits";
 import calculatorModal from "../components/calculatorModal.vue";
 import { useRouter, useRoute } from "vue-router";
@@ -145,66 +148,102 @@ const fruitStore = useFruitStore();
 const router = useRouter();
 const route = useRoute();
 
+// const totalPrice = ref("0");
+// const moneyToGiveBackToCustomer = ref("0");
+// const moneyToGiveBackVisibility = ref(false);
+// const sortedFruitTaken = ref({});
+// const filteredCategories = ref([]);
 const calculatorVisibility = ref(false);
-
-const totalPrice = ref("0");
 const customerPaidAmount = ref("0");
-const moneyToGiveBackToCustomer = ref("0");
-const moneyToGiveBackVisibility = ref(false);
-
-const fruitTaken = fruitStore.fruitsInCart;
-const sortedFruitTaken = ref({});
-const filteredCategories = ref([]);
-
 const isBookmarked = ref(false);
 const transactionIdExists = ref(undefined);
 
 onMounted(() => {
-  calculateTotal();
-  filterOutCategories();
-  createSortedFruitTakenBasedOnCategory();
+  // calculateTotal();
+  // filterOutCategories();
+  // createSortedFruitTakenBasedOnCategory();
 });
 
-function filterOutCategories() {
-  let category = [];
-  for (let i = 0; i < fruitTaken.length; i++) {
-    category.push(fruitTaken[i].category);
+const sortedFruitTaken = computed(() => {
+  let fruitsObject = {};
+  for (let i = 0; i < fruitStore.fruitsInCart.length; i++) {
+    fruitsObject[fruitStore.fruitsInCart[i].category] = [];
   }
-  filteredCategories.value = [...new Set(category)];
-}
-
-function createSortedFruitTakenBasedOnCategory() {
-  for (let i = 0; i < filteredCategories.value.length; i++) {
-    sortedFruitTaken.value[filteredCategories.value[i]] = [];
-    for (let x = 0; x < fruitTaken.length; x++) {
-      if (fruitTaken[x].category == filteredCategories.value[i]) {
-        sortedFruitTaken.value[filteredCategories.value[i]].push(fruitTaken[x]);
+  for (const prop in fruitsObject) {
+    for (let x = 0; x < fruitStore.fruitsInCart.length; x++) {
+      if (fruitStore.fruitsInCart[x].category == prop) {
+        fruitsObject[prop].push(fruitStore.fruitsInCart[x]);
       }
     }
   }
-}
+  return fruitsObject;
+});
 
-function calculateTotal() {
+// function filterOutCategories() {
+//   let category = [];
+//   for (let i = 0; i < fruitStore.fruitsInCart.length; i++) {
+//     category.push(fruitStore.fruitsInCart[i].category);
+//   }
+//   filteredCategories.value = [...new Set(category)];
+// }
+
+// function createSortedFruitTakenBasedOnCategory() {
+//   for (let i = 0; i < filteredCategories.value.length; i++) {
+//     sortedFruitTaken.value[filteredCategories.value[i]] = [];
+//     for (let x = 0; x < fruitStore.fruitsInCart.length; x++) {
+//       if (fruitStore.fruitsInCart[x].category == filteredCategories.value[i]) {
+//         sortedFruitTaken.value[filteredCategories.value[i]].push(
+//           fruitStore.fruitsInCart[x]
+//         );
+//       }
+//     }
+//   }
+// }
+
+const totalPrice = computed(() => {
   let accumulatedTotal = 0;
   for (let i = 0; i < fruitStore.fruitsInCart.length; i++) {
     accumulatedTotal += parseFloat(fruitStore.fruitsInCart[i].total);
   }
-  totalPrice.value = accumulatedTotal.toFixed(2);
-}
+  return accumulatedTotal.toFixed(2);
+});
+
+// function calculateTotal() {
+//   let accumulatedTotal = 0;
+//   for (let i = 0; i < fruitStore.fruitsInCart.length; i++) {
+//     accumulatedTotal += parseFloat(fruitStore.fruitsInCart[i].total);
+//   }
+//   totalPrice.value = accumulatedTotal.toFixed(2);
+// }
 
 function makeCalculatorInvisible(data) {
   calculatorVisibility.value = false;
   customerPaidAmount.value = parseFloat(data).toFixed(2);
+}
+
+const moneyToGiveBackToCustomer = computed(() => {
   if (
     parseFloat(customerPaidAmount.value) > parseFloat(totalPrice.value) &&
     totalPrice.value != "0.00"
   ) {
-    moneyToGiveBackVisibility.value = true;
-    moneyToGiveBackToCustomer.value = (
+    return (
       parseFloat(customerPaidAmount.value) - parseFloat(totalPrice.value)
     ).toFixed(2);
+  } else {
+    return "0.00";
   }
-}
+});
+
+const mathematicDisplay = computed(() => {
+  if (
+    parseFloat(customerPaidAmount.value) > parseFloat(totalPrice.value) &&
+    totalPrice.value != "0.00"
+  ) {
+    return true;
+  } else {
+    return false;
+  }
+});
 
 function editFruit(tradeId) {
   router.push({
@@ -221,9 +260,9 @@ function removeFruit(tradeId) {
     }
   }
   fruitStore.fruitsInCart.splice(indexToRemove, 1);
-  filterOutCategories();
-  createSortedFruitTakenBasedOnCategory();
-  calculateTotal();
+  // filterOutCategories();
+  // createSortedFruitTakenBasedOnCategory();
+  // calculateTotal();
 }
 
 function moveOnToNextTrade() {

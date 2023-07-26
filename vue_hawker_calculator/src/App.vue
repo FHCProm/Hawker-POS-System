@@ -11,21 +11,15 @@ const fruitStore = useFruitStore();
 
 onMounted(() => {
   screen.orientation.lock("portrait");
-
-  // const script = document.createElement("script");
-  // script.src = "cordova.js";
-  // document.body.appendChild(script);
 });
 
-// document.addEventListener("deviceready", onDeviceReady, false);
-// function onDeviceReady() {
-//   readFromFile((variable) => {
-//     fruitStore.fruitsForSale = variable;
-//     fruitStore.dataIsLoadedFromFiles = true;
-//   });
-
-//   console.log("device is ready");
-// }
+document.addEventListener("deviceready", onDeviceReady, false);
+function onDeviceReady() {
+  readFromFile((variable) => {
+    fruitStore.fruitsForSale = variable;
+    fruitStore.dataIsLoadedFromFiles = true;
+  });
+}
 </script>
 
 <style scoped></style>

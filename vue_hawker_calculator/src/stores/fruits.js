@@ -5,34 +5,34 @@ export const useFruitStore = defineStore("fruits", () => {
   const dataIsLoadedFromFiles = ref(false);
 
   const fruitsForSale = ref([
-    {
-      id: 1689777471127,
-      name: "木瓜",
-      price: "2.60",
-      measurement: "kg",
-      category: "普通",
-    },
-    {
-      id: 1689777471128,
-      name: "白木薯",
-      price: "2.90",
-      measurement: "kg",
-      category: "普通",
-    },
-    {
-      id: 1689777471129,
-      name: "香蕉",
-      price: "3.20",
-      measurement: "kg",
-      category: "最便宜",
-    },
-    {
-      id: 1689777471200,
-      name: "椰子",
-      price: "4.00",
-      measurement: "粒",
-      category: "最便宜",
-    },
+    // {
+    //   id: 1689777471127,
+    //   name: "木瓜",
+    //   price: "2.60",
+    //   measurement: "kg",
+    //   category: "普通",
+    // },
+    // {
+    //   id: 1689777471128,
+    //   name: "白木薯",
+    //   price: "2.90",
+    //   measurement: "kg",
+    //   category: "普通",
+    // },
+    // {
+    //   id: 1689777471129,
+    //   name: "香蕉",
+    //   price: "3.20",
+    //   measurement: "kg",
+    //   category: "最便宜",
+    // },
+    // {
+    //   id: 1689777471200,
+    //   name: "椰子",
+    //   price: "4.00",
+    //   measurement: "粒",
+    //   category: "最便宜",
+    // },
   ]);
 
   const fruitsInCart = ref([
