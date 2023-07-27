@@ -2,8 +2,6 @@ import { ref, computed } from "vue";
 import { defineStore } from "pinia";
 
 export const useFruitStore = defineStore("fruits", () => {
-  const dataIsLoadedFromFiles = ref(false);
-
   const fruitsForSale = ref([
     // {
     //   id: 1689777471127,
@@ -36,37 +34,36 @@ export const useFruitStore = defineStore("fruits", () => {
   ]);
 
   const fruitsInCart = ref([
-    {
-      id: 1689777471127,
-      name: "木瓜",
-      price: "2.60",
-      measurement: "kg",
-      category: "普通",
-      measuredAmount: "2.30",
-      total: "10.20",
-      tradeId: 1689777471321,
-    },
-
-    {
-      id: 1689777471128,
-      name: "白木薯",
-      price: "4.00",
-      measurement: "kg",
-      category: "普通",
-      measuredAmount: "3",
-      total: "8.00",
-      tradeId: 1689777471562,
-    },
-    {
-      id: 1689777471128,
-      name: "apple",
-      price: "4.00",
-      measurement: "kg",
-      category: "最贵",
-      measuredAmount: "3",
-      total: "8.00",
-      tradeId: 1689777471111,
-    },
+    // {
+    //   id: 1689777471127,
+    //   name: "木瓜",
+    //   price: "2.60",
+    //   measurement: "kg",
+    //   category: "普通",
+    //   measuredAmount: "2.30",
+    //   total: "10.20",
+    //   tradeId: 1689777471321,
+    // },
+    // {
+    //   id: 1689777471128,
+    //   name: "白木薯",
+    //   price: "4.00",
+    //   measurement: "kg",
+    //   category: "普通",
+    //   measuredAmount: "3",
+    //   total: "8.00",
+    //   tradeId: 1689777471562,
+    // },
+    // {
+    //   id: 1689777471128,
+    //   name: "apple",
+    //   price: "4.00",
+    //   measurement: "kg",
+    //   category: "最贵",
+    //   measuredAmount: "3",
+    //   total: "8.00",
+    //   tradeId: 1689777471111,
+    // },
   ]);
 
   const tradeHistory = ref([]);
@@ -76,7 +73,6 @@ export const useFruitStore = defineStore("fruits", () => {
   const measurementCategory = ref(["kg", "粒"]);
 
   return {
-    dataIsLoadedFromFiles,
     fruitsForSale,
     fruitsInCart,
     saleCategories,

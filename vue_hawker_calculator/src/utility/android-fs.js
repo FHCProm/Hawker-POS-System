@@ -1,11 +1,11 @@
-export function writeToFile(dataToBeWritten) {
+export function writeToFile(dataToBeWritten, filePath) {
   window.requestFileSystem(
     LocalFileSystem.PERSISTENT,
     0,
     function (fs) {
       //console.log("file system open: " + fs.name);
       fs.root.getFile(
-        "fruitForSale.json",
+        filePath,
         { create: true, exclusive: false },
         function (fileEntry) {
           //console.log("fileEntry is file?" + fileEntry.isFile.toString());
@@ -19,14 +19,14 @@ export function writeToFile(dataToBeWritten) {
     onErrorLoadFs
   );
 }
-export function readFromFile(myFunction) {
+export function readFromFile(myFunction, filePath) {
   window.requestFileSystem(
     LocalFileSystem.PERSISTENT,
     0,
     function (fs) {
       console.log("file system open: " + fs.name);
       fs.root.getFile(
-        "fruitForSale.json",
+        filePath,
         { create: true, exclusive: false },
         function (fileEntry) {
           //console.log("fileEntry is file?" + fileEntry.isFile.toString());
@@ -46,8 +46,6 @@ function writeFile(fileEntry, dataObj) {
   fileEntry.createWriter(function (fileWriter) {
     fileWriter.onwriteend = function () {
       console.log("Successful file write...");
-      let testingVar;
-      readFile(fileEntry, testingVar);
     };
 
     fileWriter.onerror = function (e) {

@@ -41,6 +41,8 @@ import { useRoute, useRouter } from "vue-router";
 import { useFruitStore } from "../stores/fruits";
 
 import DetailCalculator from "../components/DetailCalculator.vue";
+import { writeToFile } from "../utility/android-fs";
+import androidFiles from "../config/androidFiles";
 
 const router = useRouter();
 const calculatorComponent = ref(null);
@@ -108,6 +110,11 @@ function processCalculatorValue(data) {
       }
     }
   }
+
+  writeToFile(
+    JSON.stringify(fruitStore.fruitsInCart),
+    androidFiles.FRUIT_IN_CART_PATH
+  );
 
   router.push({
     name: "cartPage",

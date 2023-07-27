@@ -115,6 +115,8 @@ function sendingCalculatorValue() {
   align-content: center;
 }
 .number {
+  -webkit-user-select: none;
+  user-select: none;
   display: grid;
   align-content: center;
   font-size: 2rem;

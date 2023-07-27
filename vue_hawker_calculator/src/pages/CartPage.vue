@@ -143,6 +143,8 @@ import calculatorModal from "../components/calculatorModal.vue";
 import { useRouter, useRoute } from "vue-router";
 import moment from "moment";
 import { deepCopyArray } from "../utility/array-helper";
+import androidFiles from "../config/androidFiles";
+import { writeToFile } from "../utility/android-fs";
 
 const fruitStore = useFruitStore();
 const router = useRouter();
@@ -278,6 +280,12 @@ function moveOnToNextTrade() {
     });
   }
   fruitStore.fruitsInCart = [];
+
+  writeToFile(
+    JSON.stringify(fruitStore.fruitsInCart),
+    androidFiles.FRUIT_IN_CART_PATH
+  );
+
   router.push({ name: "home" });
 }
 

@@ -114,6 +114,7 @@
 import { onMounted, ref } from "vue";
 import { useFruitStore } from "../stores/fruits";
 import { writeToFile } from "../utility/android-fs";
+import androidFiles from "../config/androidFiles";
 
 const popUpElement = ref(null);
 const popUpVisibility = ref(false);
@@ -230,7 +231,11 @@ function saveFields() {
       }
     }
   }
-  writeToFile(JSON.stringify(fruitStore.fruitsForSale));
+
+  writeToFile(
+    JSON.stringify(fruitStore.fruitsForSale),
+    androidFiles.FRUIT_FOR_SALE_PATH
+  );
 
   popUpVisibility.value = false;
 }

@@ -6,6 +6,7 @@
 import { onMounted, ref } from "vue";
 import { readFromFile } from "./utility/android-fs";
 import { useFruitStore } from "./stores/fruits";
+import androidFiles from "./config/androidFiles";
 
 const fruitStore = useFruitStore();
 
@@ -17,8 +18,11 @@ document.addEventListener("deviceready", onDeviceReady, false);
 function onDeviceReady() {
   readFromFile((variable) => {
     fruitStore.fruitsForSale = variable;
-    fruitStore.dataIsLoadedFromFiles = true;
-  });
+  }, androidFiles.FRUIT_FOR_SALE_PATH);
+
+  readFromFile((variable) => {
+    fruitStore.fruitsInCart = variable;
+  }, androidFiles.FRUIT_IN_CART_PATH);
 }
 </script>
 
