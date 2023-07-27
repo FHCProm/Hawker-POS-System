@@ -23,6 +23,10 @@ function onDeviceReady() {
   readFromFile((variable) => {
     fruitStore.fruitsInCart = variable;
   }, androidFiles.FRUIT_IN_CART_PATH);
+
+  readFromFile((variable) => {
+    fruitStore.tradeHistory = variable;
+  }, androidFiles.FRUIT_HISTORY);
 }
 </script>
 

@@ -4,7 +4,44 @@
     <div>选择要更改的水果</div>
   </div>
 
-  <div class="add-button-wrapper">
+  <div class="top-button-wrapper">
+    <button class="upload-button">
+      <svg
+        v-if="!uploading"
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke-width="1.5"
+        stroke="currentColor"
+        class="upload-svg"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          d="M12 16.5V9.75m0 0l3 3m-3-3l-3 3M6.75 19.5a4.5 4.5 0 01-1.41-8.775 5.25 5.25 0 0110.233-2.33 3 3 0 013.758 3.848A3.752 3.752 0 0118 19.5H6.75z"
+        />
+      </svg>
+      <div v-else class="spinner"></div>
+    </button>
+
+    <button class="download-button">
+      <svg
+        v-if="!downloading"
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke-width="1.5"
+        stroke="currentColor"
+        class="cloud-svg"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          d="M12 9.75v6.75m0 0l-3-3m3 3l3-3m-8.25 6a4.5 4.5 0 01-1.41-8.775 5.25 5.25 0 0110.233-2.33 3 3 0 013.758 3.848A3.752 3.752 0 0118 19.5H6.75z"
+        />
+      </svg>
+      <div v-else class="spinner"></div>
+    </button>
     <button
       class="add-button primary-button-design"
       @click="changePopUpVisibility()"
@@ -82,6 +119,9 @@ let dataForTheTable = ref({});
 let categoryForTheTable = ref([]);
 let selectedIdForConfirmationBox = ref(null);
 
+const uploading = ref(false);
+const downloading = ref(false);
+
 onMounted(() => {});
 
 const TableData = computed(() => {
@@ -130,6 +170,17 @@ function deleteFruit(decision) {
     }
     fruitStore.fruitsForSale.splice(indexToRemove, 1);
   }
+}
+
+function uploudFruitInCartToFirebase() {
+  uploading.value = true;
+  console.log("uploading");
+  uploading.value = false;
+}
+function downloadFruitInCartFromFirebase() {
+  downloading.value = true;
+  console.log("downloading");
+  downloading.value = false;
 }
 </script>
 
@@ -187,11 +238,48 @@ function deleteFruit(decision) {
   margin: auto;
 }
 
-.add-button-wrapper {
+.top-button-wrapper {
   display: flex;
   width: 100%;
   padding-right: 1rem;
   justify-content: flex-end;
+}
+
+.upload-button {
+  display: flex;
+  width: min-content;
+  align-items: center;
+  padding: 0 1rem;
+  margin-right: 0.5rem;
+  background: rgb(241, 110, 110);
+  border-radius: 0.5rem;
+}
+
+.upload-button:active {
+  background: rgb(236, 61, 61);
+}
+
+.upload-svg {
+  height: 30px;
+  width: 30px;
+}
+
+.download-button {
+  display: flex;
+  width: min-content;
+  align-items: center;
+  padding: 0 1rem;
+  margin-right: 0.5rem;
+  background: rgb(193, 241, 110);
+  border-radius: 0.5rem;
+}
+.download-button:active {
+  background: rgb(96, 168, 76);
+}
+
+.cloud-svg {
+  height: 30px;
+  width: 30px;
 }
 
 .add-button {
@@ -213,5 +301,23 @@ function deleteFruit(decision) {
   width: 30px;
   stroke: red;
   height: 30px;
+}
+
+.spinner {
+  border: 3px solid #f3f3f3;
+  border-top: 3px solid #060b0e;
+  border-radius: 50%;
+  width: 27px;
+  height: 27px;
+  animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 </style>

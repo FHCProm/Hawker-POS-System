@@ -278,6 +278,10 @@ function moveOnToNextTrade() {
       total: totalPrice.value,
       fruits: deepCopyArray(fruitStore.fruitsInCart),
     });
+    writeToFile(
+      JSON.stringify(fruitStore.tradeHistory),
+      androidFiles.FRUIT_HISTORY
+    );
   }
   fruitStore.fruitsInCart = [];
 
@@ -318,6 +322,10 @@ function bookmarkTransaction() {
 
       transactionIdExists.value = undefined;
     }
+    writeToFile(
+      JSON.stringify(fruitStore.tradeHistory),
+      androidFiles.FRUIT_HISTORY
+    );
   }
 }
 </script>

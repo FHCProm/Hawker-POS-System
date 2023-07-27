@@ -51,6 +51,8 @@ import moment from "moment";
 import { useFruitStore } from "../stores/fruits";
 import { useRoute, useRouter } from "vue-router";
 import { deepCopyArray } from "../utility/array-helper";
+import { writeToFile } from "../utility/android-fs";
+import androidFiles from "../config/androidFiles";
 
 const fruitStore = useFruitStore();
 
@@ -156,6 +158,11 @@ function toggleBookmark(id) {
         !fruitStore.tradeHistory[i].bookmarked;
     }
   }
+
+  writeToFile(
+    JSON.stringify(fruitStore.tradeHistory),
+    androidFiles.FRUIT_HISTORY
+  );
 }
 
 function arrangeHistory() {

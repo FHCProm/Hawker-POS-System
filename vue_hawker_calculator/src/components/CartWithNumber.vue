@@ -24,14 +24,22 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, computed } from "vue";
 import { useFruitStore } from "../stores/fruits";
 const fruitStore = useFruitStore();
 
-const cartIsEmpty = ref(true);
+// const cartIsEmpty = ref(true);
 onMounted(() => {
+  // if (fruitStore.fruitsInCart.length > 0) {
+  //   cartIsEmpty.value = false;
+  // }
+});
+
+const cartIsEmpty = computed(() => {
   if (fruitStore.fruitsInCart.length > 0) {
-    cartIsEmpty.value = false;
+    return false;
+  } else {
+    return true;
   }
 });
 </script>
