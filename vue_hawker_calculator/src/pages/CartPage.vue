@@ -262,6 +262,10 @@ function removeFruit(tradeId) {
     }
   }
   fruitStore.fruitsInCart.splice(indexToRemove, 1);
+  writeToFile(
+    JSON.stringify(fruitStore.fruitsInCart),
+    androidFiles.FRUIT_IN_CART_PATH
+  );
   // filterOutCategories();
   // createSortedFruitTakenBasedOnCategory();
   // calculateTotal();

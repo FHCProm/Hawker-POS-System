@@ -5,7 +5,7 @@
   </div>
   <div
     class="history-container"
-    v-for="history in fruitStore.tradeHistory"
+    v-for="history in arrangeHistory"
     :key="history"
   >
     <div class="history-row" :class="{ 'yellow-border': history.bookmarked }">
@@ -45,7 +45,7 @@
 </template>
 
 <script setup>
-import { onBeforeMount, onMounted, ref } from "vue";
+import { computed, onBeforeMount, onMounted, ref } from "vue";
 import BackButton from "../components/BackButton.vue";
 import moment from "moment";
 import { useFruitStore } from "../stores/fruits";
@@ -141,12 +141,6 @@ function populateCartPage(transactionHistory) {
 //   },
 // ]);
 
-onBeforeMount(() => {
-  if (fruitStore.tradeHistory.length != 0) {
-    fruitStore.tradeHistory = arrangeHistory();
-  }
-});
-
 function timeFromNow(data) {
   return moment(data).fromNow();
 }
@@ -165,11 +159,59 @@ function toggleBookmark(id) {
   );
 }
 
-function arrangeHistory() {
-  let historyCopy = deepCopyArray(fruitStore.tradeHistory);
-  fruitStore.tradeHistory.splice(0, fruitStore.tradeHistory.length);
-  let arrangedVersion = [];
+// function arrangeHistory() {
+//   let historyCopy = deepCopyArray(fruitStore.tradeHistory);
+//   fruitStore.tradeHistory.splice(0, fruitStore.tradeHistory.length);
+//   let arrangedVersion = [];
 
+//   //filter out bookmarks
+//   let bookmarkedHistory = [];
+//   let indexesToRemove = [];
+//   for (let i = 0; i < historyCopy.length; i++) {
+//     if (historyCopy[i].bookmarked) {
+//       indexesToRemove.push(i);
+//       bookmarkedHistory.push(historyCopy[i]);
+//     }
+//   }
+
+//   for (let i = indexesToRemove.length - 1; i >= 0; i--) {
+//     historyCopy.splice(indexesToRemove[i], 1);
+//   }
+
+//   while (bookmarkedHistory.length != 0) {
+//     let indexToRemove = 0;
+//     let biggestUnix = bookmarkedHistory[0].transactionId;
+//     for (let i = 0; i < bookmarkedHistory.length; i++) {
+//       if (bookmarkedHistory[i].transactionId > biggestUnix) {
+//         biggestUnix = bookmarkedHistory[i].transactionId;
+//         indexToRemove = i;
+//       }
+//     }
+//     arrangedVersion.push(bookmarkedHistory[indexToRemove]);
+//     bookmarkedHistory.splice(indexToRemove, 1);
+//   }
+
+//   //after removed the bookmarked history , we proceed with non-bookmarked ones
+
+//   while (historyCopy.length != 0) {
+//     let indexToRemove = 0;
+//     let biggestUnix = historyCopy[0].transactionId;
+//     for (let i = 0; i < historyCopy.length; i++) {
+//       if (historyCopy[i].transactionId > biggestUnix) {
+//         biggestUnix = historyCopy[i].transactionId;
+//         indexToRemove = i;
+//       }
+//     }
+//     arrangedVersion.push(historyCopy[indexToRemove]);
+//     historyCopy.splice(indexToRemove, 1);
+//   }
+//   console.log(arrangedVersion);
+//   return arrangedVersion;
+// }
+
+const arrangeHistory = computed(() => {
+  let historyCopy = deepCopyArray(fruitStore.tradeHistory);
+  let arrangedVersion = [];
   //filter out bookmarks
   let bookmarkedHistory = [];
   let indexesToRemove = [];
@@ -179,7 +221,6 @@ function arrangeHistory() {
       bookmarkedHistory.push(historyCopy[i]);
     }
   }
-
   for (let i = indexesToRemove.length - 1; i >= 0; i--) {
     historyCopy.splice(indexesToRemove[i], 1);
   }
@@ -213,7 +254,7 @@ function arrangeHistory() {
   }
   console.log(arrangedVersion);
   return arrangedVersion;
-}
+});
 </script>
 
 <style scoped>

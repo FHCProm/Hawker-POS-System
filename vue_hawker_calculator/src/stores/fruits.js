@@ -1,7 +1,13 @@
 import { ref, computed } from "vue";
 import { defineStore } from "pinia";
+import firebaseConfig from "../config/firebaseConfig";
+import { initializeApp } from "firebase/app";
+import { getFirestore } from "firebase/firestore";
 
 export const useFruitStore = defineStore("fruits", () => {
+  const firebase = initializeApp(firebaseConfig);
+  const firestore = getFirestore(firebase);
+
   const fruitsForSale = ref([
     // {
     //   id: 1689777471127,
@@ -78,5 +84,7 @@ export const useFruitStore = defineStore("fruits", () => {
     saleCategories,
     measurementCategory,
     tradeHistory,
+    firebase,
+    firestore,
   };
 });
