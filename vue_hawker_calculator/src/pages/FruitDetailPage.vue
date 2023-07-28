@@ -2,7 +2,7 @@
   <div class="fruit-detail-page">
     <div class="header">
       <BackButton :back-path="backPath"></BackButton>
-      <div>輸入水果重量</div>
+      <div>输入水果重量</div>
     </div>
     <div
       class="fruit-detail"
@@ -178,7 +178,6 @@ function processCalculatorValue(data) {
 
 .gram-design-wrapper {
   display: flex;
-  /* position: relative; */
   padding: 0.5rem 3rem;
   margin: 1rem auto;
   margin-bottom: 1rem;

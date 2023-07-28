@@ -5,7 +5,10 @@
   </div>
 
   <div class="top-button-wrapper">
-    <button class="upload-button">
+    <button
+      class="upload-button"
+      @click="cloudConfirmationBoxVisibility = true"
+    >
       <svg
         v-if="!uploading"
         xmlns="http://www.w3.org/2000/svg"
@@ -24,7 +27,7 @@
       <div v-else class="spinner"></div>
     </button>
 
-    <button class="download-button">
+    <button class="download-button" @click="downloadFruitForSaleFromFirebase">
       <svg
         v-if="!downloading"
         xmlns="http://www.w3.org/2000/svg"
@@ -102,6 +105,11 @@
     v-if="confirmationBoxVisibility"
     @confirmation-done="deleteFruit"
   ></ConfirmationBox>
+
+  <CloudConfirmationBox
+    v-if="cloudConfirmationBoxVisibility"
+    @confirmation-result="uploudFruitForSaleToFirebase"
+  ></CloudConfirmationBox>
 </template>
 
 <script setup>
@@ -110,17 +118,20 @@ import EditFruitModal from "../components/EditFruitModal.vue";
 import { useFruitStore } from "../stores/fruits";
 import BackButton from "../components/BackButton.vue";
 import ConfirmationBox from "../components/ConfirmationBox.vue";
+import CloudConfirmationBox from "../components/CloudConfirmationBox.vue";
+import { doc, getDoc, setDoc } from "firebase/firestore";
+import { writeToFile } from "../utility/android-fs";
+import androidFiles from "../config/androidFiles";
 
 const fruitStore = useFruitStore();
 const popUpModal = ref(null);
 const confirmationBoxVisibility = ref(false);
 
-let dataForTheTable = ref({});
-let categoryForTheTable = ref([]);
 let selectedIdForConfirmationBox = ref(null);
 
 const uploading = ref(false);
 const downloading = ref(false);
+const cloudConfirmationBoxVisibility = ref(false);
 
 onMounted(() => {});
 
@@ -169,17 +180,44 @@ function deleteFruit(decision) {
       }
     }
     fruitStore.fruitsForSale.splice(indexToRemove, 1);
+    writeToFile(
+      JSON.stringify(fruitStore.fruitsForSale),
+      androidFiles.FRUIT_FOR_SALE_PATH
+    );
   }
 }
 
-function uploudFruitInCartToFirebase() {
-  uploading.value = true;
-  console.log("uploading");
-  uploading.value = false;
+async function uploudFruitForSaleToFirebase(boolean) {
+  cloudConfirmationBoxVisibility.value = false;
+  if (boolean) {
+    uploading.value = true;
+    const dataObject = {
+      data: fruitStore.fruitsForSale,
+    };
+    await setDoc(
+      doc(fruitStore.firestore, "fruit-store", "fruit-for-sale"),
+      dataObject
+    );
+    console.log("finished uploading");
+    uploading.value = false;
+  }
 }
-function downloadFruitInCartFromFirebase() {
+
+async function downloadFruitForSaleFromFirebase() {
   downloading.value = true;
-  console.log("downloading");
+
+  const docRef = doc(fruitStore.firestore, "fruit-store", "fruit-for-sale");
+  const docSnap = await getDoc(docRef);
+  if (docSnap.exists()) {
+    fruitStore.fruitsForSale = docSnap.data().data;
+    writeToFile(
+      JSON.stringify(fruitStore.fruitsForSale),
+      androidFiles.FRUIT_FOR_SALE_PATH
+    );
+  } else {
+    console.log("no data");
+  }
+  console.log("finished downloading");
   downloading.value = false;
 }
 </script>

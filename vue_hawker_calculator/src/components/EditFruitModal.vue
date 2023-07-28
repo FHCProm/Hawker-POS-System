@@ -254,7 +254,7 @@ function refreshFieldsToDefault() {
 <style scoped>
 .edit-fruit-modal-container {
   overflow: auto;
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   right: 0;

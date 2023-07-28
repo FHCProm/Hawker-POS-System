@@ -16,7 +16,7 @@
 </template>
 
 <script setup>
-import { onMounted, ref } from "vue";
+import { onMounted, onUnmounted, ref } from "vue";
 import calculator from "./calculator.vue";
 
 const emit = defineEmits(["dataReady"]);
@@ -29,7 +29,7 @@ function sendingEventToParent(data) {
 
 <style scoped>
 .popup-container {
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   bottom: 0;
@@ -83,7 +83,6 @@ function sendingEventToParent(data) {
 
 .calculator-display {
   display: flex;
-  /* position: relative; */
   padding: 1rem;
   margin: 0 1rem;
   margin-top: 1rem;
