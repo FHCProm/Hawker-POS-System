@@ -468,6 +468,7 @@ function bookmarkTransaction() {
 }
 .button-layout {
   display: flex;
+  margin-bottom: 1rem;
 }
 
 .collected-money {

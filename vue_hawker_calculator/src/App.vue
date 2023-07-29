@@ -4,10 +4,11 @@
 
 <script setup>
 import { onMounted, ref } from "vue";
-import { readFromFile } from "./utility/android-fs";
+import { readFromFile, writeToFile } from "./utility/android-fs";
 import { useFruitStore } from "./stores/fruits";
 import androidFiles from "./config/androidFiles";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import moment from "moment";
 
 const fruitStore = useFruitStore();
 
@@ -28,8 +29,6 @@ onMounted(() => {
 document.addEventListener("deviceready", onDeviceReady, false);
 
 function onDeviceReady() {
-  screen.orientation.lock("portrait");
-
   readFromFile((variable) => {
     fruitStore.fruitsForSale = variable;
   }, androidFiles.FRUIT_FOR_SALE_PATH);
@@ -40,6 +39,19 @@ function onDeviceReady() {
 
   readFromFile((variable) => {
     fruitStore.tradeHistory = variable;
+    let removedOlderHistory = [];
+    for (let i = 0; i < fruitStore.tradeHistory.length; i++) {
+      let dateOfHistory = moment(fruitStore.tradeHistory[i].transactionId);
+      let isToday = moment().isSame(dateOfHistory, "day");
+      if (isToday) {
+        removedOlderHistory.push(fruitStore.tradeHistory[i]);
+      }
+    }
+    fruitStore.tradeHistory = removedOlderHistory;
+    writeToFile(
+      JSON.stringify(fruitStore.tradeHistory),
+      androidFiles.FRUIT_HISTORY
+    );
   }, androidFiles.FRUIT_HISTORY);
 }
 </script>

@@ -51,7 +51,7 @@ function prefillDisplayValue(number) {
 function appendNumber(number) {
   navigator.vibrate(40);
   if (noNumberInCalculator) {
-    calculatorDisplayValue.value = "";
+    calculatorDisplayValue.value = "0";
     noNumberInCalculator = false;
   }
   //need to fix the starting . WHen start with dot only
@@ -59,16 +59,14 @@ function appendNumber(number) {
   if (regex.test(calculatorDisplayValue.value)) {
     return;
   }
-  if (number == "." && calculatorDisplayValue.value == "") {
-    calculatorDisplayValue.value = "0.";
-  }
+
   if (number == "." && calculatorDisplayValue.value.includes(".")) {
     return;
   }
   if (number == "0" && calculatorDisplayValue.value == "0") {
     return;
   }
-  if (calculatorDisplayValue.value == "0") {
+  if (calculatorDisplayValue.value == "0" && number != ".") {
     calculatorDisplayValue.value = number;
     return;
   }

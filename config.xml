@@ -10,4 +10,23 @@
     <allow-intent href="https://*/*" />
     
     <preference name="AndroidPersistentFileLocation" value="Internal" />
+    <preference name="Orientation" value="portrait" />
+    <platform name="android">
+        <icon src="res/icon/android/g380.xml" />
+    </platform>
+    <!-- <platform name="android">
+        <splash src="res/screen/android/exported-splashscreen.png" density="port-hdpi" />
+        <splash src="res/screen/android/exported-splashscreen.png" density="port-ldpi" />
+        <splash src="res/screen/android/exported-splashscreen.png" density="port-mdpi" />
+        <splash src="res/screen/android/exported-splashscreen.png" density="port-xhdpi" />
+        <splash src="res/screen/android/exported-splashscreen.png" density="port-xxhdpi" />
+        <splash src="res/screen/android/exported-splashscreen.png" density="port-xxxhdpi" /> 
+    </platform> -->
+
+<platform name="android">
+    <preference name="AndroidWindowSplashScreenAnimatedIcon" value="res/screen/android/exported_splashscreen.xml" />
+    <preference name="AndroidWindowSplashScreenBackground" value="#fd7b6a" />
+</platform>
+
+    
 </widget>
