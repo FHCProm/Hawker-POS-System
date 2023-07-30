@@ -181,27 +181,6 @@ const sortedFruitTaken = computed(() => {
   return fruitsObject;
 });
 
-// function filterOutCategories() {
-//   let category = [];
-//   for (let i = 0; i < fruitStore.fruitsInCart.length; i++) {
-//     category.push(fruitStore.fruitsInCart[i].category);
-//   }
-//   filteredCategories.value = [...new Set(category)];
-// }
-
-// function createSortedFruitTakenBasedOnCategory() {
-//   for (let i = 0; i < filteredCategories.value.length; i++) {
-//     sortedFruitTaken.value[filteredCategories.value[i]] = [];
-//     for (let x = 0; x < fruitStore.fruitsInCart.length; x++) {
-//       if (fruitStore.fruitsInCart[x].category == filteredCategories.value[i]) {
-//         sortedFruitTaken.value[filteredCategories.value[i]].push(
-//           fruitStore.fruitsInCart[x]
-//         );
-//       }
-//     }
-//   }
-// }
-
 const totalPrice = computed(() => {
   let accumulatedTotal = 0;
   for (let i = 0; i < fruitStore.fruitsInCart.length; i++) {
@@ -209,14 +188,6 @@ const totalPrice = computed(() => {
   }
   return accumulatedTotal.toFixed(2);
 });
-
-// function calculateTotal() {
-//   let accumulatedTotal = 0;
-//   for (let i = 0; i < fruitStore.fruitsInCart.length; i++) {
-//     accumulatedTotal += parseFloat(fruitStore.fruitsInCart[i].total);
-//   }
-//   totalPrice.value = accumulatedTotal.toFixed(2);
-// }
 
 function makeCalculatorInvisible(data) {
   calculatorVisibility.value = false;
@@ -255,13 +226,23 @@ function editFruit(tradeId) {
 }
 
 function removeFruit(tradeId) {
+  let modifedFruitsInCart = [];
+
+  for (let key in sortedFruitTaken.value) {
+    for (let x = 0; x < sortedFruitTaken.value[key].length; x++) {
+      modifedFruitsInCart.push({ ...sortedFruitTaken.value[key][x] });
+    }
+  }
+
   let indexToRemove = null;
-  for (let i = 0; i < fruitStore.fruitsInCart.length; i++) {
-    if (fruitStore.fruitsInCart[i].tradeId == tradeId) {
+  for (let i = 0; i < modifedFruitsInCart.length; i++) {
+    if (modifedFruitsInCart[i].tradeId == tradeId) {
       indexToRemove = i;
     }
   }
-  fruitStore.fruitsInCart.splice(indexToRemove, 1);
+
+  modifedFruitsInCart.splice(indexToRemove, 1);
+  fruitStore.fruitsInCart = [...modifedFruitsInCart];
   writeToFile(
     JSON.stringify(fruitStore.fruitsInCart),
     androidFiles.FRUIT_IN_CART_PATH

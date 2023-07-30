@@ -13,6 +13,7 @@ a:-webkit-any-link {
 
 html {
   position: relative;
+  touch-action: manipulation;
 }
 
 body {

@@ -4,12 +4,14 @@
 
 <script setup>
 import { onMounted, ref } from "vue";
+import { useRouter } from "vue-router";
 import { readFromFile, writeToFile } from "./utility/android-fs";
 import { useFruitStore } from "./stores/fruits";
 import androidFiles from "./config/androidFiles";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import moment from "moment";
 
+const router = useRouter();
 const fruitStore = useFruitStore();
 
 onMounted(() => {
@@ -53,6 +55,19 @@ function onDeviceReady() {
       androidFiles.FRUIT_HISTORY
     );
   }, androidFiles.FRUIT_HISTORY);
+
+  document.addEventListener(
+    "backbutton",
+    function (evt) {
+      if (window.location.href !== "https://localhost/index.html#/") {
+        router.push({ name: "home" });
+      } else {
+        console.log(window.plugins);
+        window.plugins.appMinimize.minimize();
+      }
+    },
+    false
+  );
 }
 </script>
 
