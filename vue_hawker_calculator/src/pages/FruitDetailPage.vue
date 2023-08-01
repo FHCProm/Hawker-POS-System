@@ -59,7 +59,7 @@ let selectedFruit = ref({});
 
 onMounted(() => {
   calculatorDimension.value = `${calculatorComponent.value.calculatorDimension}px`;
-  if (pageBeforeThis == "Landing") {
+  if (pageBeforeThis == "fruitPage") {
     const fruits = fruitStore.fruitsForSale;
     for (let x = 0; x < fruits.length; x++) {
       if (fruitId == fruits[x].id) {
@@ -90,7 +90,7 @@ function processCalculatorValue(data) {
     parseFloat(data) * parseFloat(selectedFruit.value.price)
   ).toFixed(2);
 
-  if (pageBeforeThis == "Landing") {
+  if (pageBeforeThis == "fruitPage") {
     let date = new Date();
     currentTradeId.value = date.getTime();
     fruitStore.fruitsInCart.push({

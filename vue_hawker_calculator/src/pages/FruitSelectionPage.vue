@@ -31,7 +31,7 @@ onMounted(() => {});
 function goToDetails(fruitId) {
   router.push({
     name: "fruitDetail",
-    params: { id: fruitId, pageBeforeThis: "Landing" },
+    params: { id: fruitId, pageBeforeThis: "fruitPage" },
   });
 }
 

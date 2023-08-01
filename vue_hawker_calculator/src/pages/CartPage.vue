@@ -191,7 +191,9 @@ const totalPrice = computed(() => {
   for (let i = 0; i < fruitStore.fruitsInCart.length; i++) {
     accumulatedTotal += parseFloat(fruitStore.fruitsInCart[i].total);
   }
-  return accumulatedTotal.toFixed(2);
+  let rounded = Number(accumulatedTotal.toFixed(1));
+
+  return rounded.toFixed(2);
 });
 
 function makeCalculatorInvisible(data) {
