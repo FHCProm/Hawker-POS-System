@@ -1,6 +1,6 @@
 <template>
   <div class="header">
-    <BackButton back-path="/"></BackButton>
+    <BackButton back-path="/fruits"></BackButton>
     <div>选择要更改的水果</div>
   </div>
 

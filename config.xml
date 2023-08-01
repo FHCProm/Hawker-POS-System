@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='utf-8'?>
 <widget id="com.guoren.hawkercalculator" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-    <name>Hawker Calculator</name>
+    <name>小贩神器</name>
     <description>Sample Apache Cordova App</description>
     <author email="dev@cordova.apache.org" href="https://cordova.apache.org">
         Apache Cordova Team
@@ -14,14 +14,7 @@
     <platform name="android">
         <icon src="res/icon/android/g380.xml" />
     </platform>
-    <!-- <platform name="android">
-        <splash src="res/screen/android/exported-splashscreen.png" density="port-hdpi" />
-        <splash src="res/screen/android/exported-splashscreen.png" density="port-ldpi" />
-        <splash src="res/screen/android/exported-splashscreen.png" density="port-mdpi" />
-        <splash src="res/screen/android/exported-splashscreen.png" density="port-xhdpi" />
-        <splash src="res/screen/android/exported-splashscreen.png" density="port-xxhdpi" />
-        <splash src="res/screen/android/exported-splashscreen.png" density="port-xxxhdpi" /> 
-    </platform> -->
+
 
 <platform name="android">
     <preference name="AndroidWindowSplashScreenAnimatedIcon" value="res/screen/android/exported_splashscreen.xml" />

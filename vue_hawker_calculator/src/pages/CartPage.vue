@@ -53,11 +53,16 @@
         <div class="details-price-layout" @click="editFruit(fruit.tradeId)">
           <div class="name-gram-wrapper">
             <div class="fruit-name">{{ fruit.name }}</div>
-            <div class="fruit-gram">
-              {{ fruit.measuredAmount }}{{ fruit.measurement }}
+            <div class="fruit-gram"></div>
+            {{ fruit.measuredAmount }}{{ fruit.measurement }}
+          </div>
+
+          <div class="price-and-base">
+            <div class="fruit-price">RM{{ fruit.total }}</div>
+            <div class="base-price">
+              RM{{ fruit.price }}/{{ fruit.measurement }}
             </div>
           </div>
-          <div class="fruit-price">RM{{ fruit.total }}</div>
         </div>
         <div class="delete-svg-layout" @click="removeFruit(fruit.tradeId)">
           <svg
@@ -78,7 +83,7 @@
       </div>
     </div>
 
-    <router-link to="/">
+    <router-link to="/fruits">
       <div class="plus-button-layout">
         <div class="plus-button-wrapper">
           <svg
@@ -274,8 +279,6 @@ function moveOnToNextTrade() {
     JSON.stringify(fruitStore.fruitsInCart),
     androidFiles.FRUIT_IN_CART_PATH
   );
-
-  router.push({ name: "home" });
 }
 
 function bookmarkTransaction() {
@@ -383,6 +386,7 @@ function bookmarkTransaction() {
 .details-price-layout {
   display: flex;
   flex: 1;
+  align-items: center;
 }
 .name-gram-wrapper {
   display: flex;
@@ -392,13 +396,26 @@ function bookmarkTransaction() {
   font-size: 1.5rem;
   padding-right: 10px;
 }
+
 .fruit-gram {
   font-size: 1rem;
 }
+
+.price-and-base {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  align-items: flex-end;
+}
+
 .fruit-price {
   font-size: 1.4rem;
-  flex: 1;
-  text-align: right;
+}
+
+.base-price {
+  font-size: 0.7rem;
+  font-style: italic;
+  color: gray;
 }
 
 .delete-svg-layout {

@@ -1,12 +1,12 @@
 import { createRouter, createWebHashHistory } from "vue-router";
-import LandingPage from "./pages/LandingPage.vue";
+import FruitSelectionPage from "./pages/FruitSelectionPage.vue";
 import EditFruitPage from "./pages/EditFruitPage.vue";
 import FruitDetailPage from "./pages/FruitDetailPage.vue";
 import CartPage from "./pages/CartPage.vue";
 import TransactionHistoryPage from "./pages/TransactionHistoryPage.vue";
 
 const routes = [
-  { path: "/", name: "home", component: LandingPage },
+  { path: "/fruits", name: "fruitPage", component: FruitSelectionPage },
   { path: "/edit", component: EditFruitPage },
   {
     path: "/fruitDetail/:id/:pageBeforeThis",

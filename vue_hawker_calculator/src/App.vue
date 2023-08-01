@@ -26,6 +26,10 @@ onMounted(() => {
       const errorCode = error.code;
       const errorMessage = error.message;
     });
+  router.push({
+    name: "cartPage",
+    params: { newTradeId: 0 },
+  });
 });
 
 document.addEventListener("deviceready", onDeviceReady, false);
@@ -59,8 +63,11 @@ function onDeviceReady() {
   document.addEventListener(
     "backbutton",
     function (evt) {
-      if (window.location.href !== "https://localhost/index.html#/") {
-        router.push({ name: "home" });
+      if (window.location.href !== "https://localhost/index.html#/cartPage/0") {
+        router.push({
+          name: "cartPage",
+          params: { newTradeId: 0 },
+        });
       } else {
         console.log(window.plugins);
         window.plugins.appMinimize.minimize();

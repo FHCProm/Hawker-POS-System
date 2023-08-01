@@ -52,7 +52,7 @@ const fruitId = route.params.id;
 const pageBeforeThis = route.params.pageBeforeThis;
 const fruitDetailBackgroundColor = ref("rgb(144, 197, 235)");
 const calculatorDimension = ref(0);
-const backPath = ref("/");
+const backPath = ref("/fruits");
 const currentTradeId = ref(0);
 
 let selectedFruit = ref({});
