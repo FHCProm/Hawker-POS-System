@@ -5,6 +5,10 @@
   </div>
 
   <div class="top-button-wrapper">
+    <div class="upload-status" :style="{ color: statusTextColor }">
+      {{ uploadStatusText }}
+    </div>
+
     <button
       class="upload-button"
       @click="cloudConfirmationBoxVisibility = true"
@@ -133,6 +137,9 @@ const uploading = ref(false);
 const downloading = ref(false);
 const cloudConfirmationBoxVisibility = ref(false);
 
+const uploadStatusText = ref("");
+const statusTextColor = ref("");
+
 onMounted(() => {});
 
 const TableData = computed(() => {
@@ -194,12 +201,18 @@ async function uploudFruitForSaleToFirebase(boolean) {
     const dataObject = {
       data: fruitStore.fruitsForSale,
     };
+
     await setDoc(
       doc(fruitStore.firestore, "fruit-store", "fruit-for-sale"),
       dataObject
     );
-    console.log("finished uploading");
     uploading.value = false;
+    statusTextColor.value = "green";
+    uploadStatusText.value = "success";
+    await delay(5000);
+    uploadStatusText.value = "";
+
+    console.log("finished uploading");
   }
 }
 
@@ -219,6 +232,10 @@ async function downloadFruitForSaleFromFirebase() {
   }
   console.log("finished downloading");
   downloading.value = false;
+}
+
+function delay(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
 }
 </script>
 
@@ -281,11 +298,17 @@ async function downloadFruitForSaleFromFirebase() {
   width: 100%;
   padding-right: 1rem;
   justify-content: flex-end;
+  align-items: center;
+}
+
+.upload-status {
+  margin-right: 0.5rem;
 }
 
 .upload-button {
   display: flex;
   width: min-content;
+  height: 2.5rem;
   align-items: center;
   padding: 0 1rem;
   margin-right: 0.5rem;
@@ -305,6 +328,7 @@ async function downloadFruitForSaleFromFirebase() {
 .download-button {
   display: flex;
   width: min-content;
+  height: 2.5rem;
   align-items: center;
   padding: 0 1rem;
   margin-right: 0.5rem;

@@ -5,7 +5,12 @@
   </div>
   <top-menu-bar @changed-category="setCategory"></top-menu-bar>
   <div class="selection-wrapper">
-    <div v-for="fruit in sortedFruit" :key="fruit" class="one">
+    <div
+      v-for="fruit in sortedFruit"
+      :key="fruit"
+      class="one"
+      :style="{ background: boxColor }"
+    >
       <div class="fruit-name-layout" @click="goToDetails(`${fruit.id}`)">
         {{ fruit.name }}
       </div>
@@ -23,6 +28,7 @@ import CartWithNumber from "../components/CartWithNumber.vue";
 const fruitStore = useFruitStore();
 
 const currentCategory = ref("普通");
+const boxColor = ref("white");
 
 const router = useRouter();
 
@@ -37,6 +43,15 @@ function goToDetails(fruitId) {
 
 function setCategory(category) {
   currentCategory.value = category;
+  if (category == "普通") {
+    boxColor.value = "white";
+  }
+  if (category == "做生意") {
+    boxColor.value = "#03627d";
+  }
+  if (category == "最便宜") {
+    boxColor.value = "#fc6363";
+  }
 }
 
 const sortedFruit = computed(() => {
@@ -71,6 +86,7 @@ const sortedFruit = computed(() => {
 }
 
 .one {
+  background-color: rgb(197, 90, 73);
   border-radius: 2px;
   margin: 0.5rem;
   min-height: 120px;

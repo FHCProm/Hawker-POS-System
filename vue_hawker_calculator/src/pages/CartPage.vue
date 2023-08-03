@@ -191,7 +191,7 @@ const totalPrice = computed(() => {
   for (let i = 0; i < fruitStore.fruitsInCart.length; i++) {
     accumulatedTotal += parseFloat(fruitStore.fruitsInCart[i].total);
   }
-  let rounded = Number(accumulatedTotal.toFixed(1));
+  let rounded = roundHalfUp(accumulatedTotal, 1);
 
   return rounded.toFixed(2);
 });
@@ -317,6 +317,14 @@ function bookmarkTransaction() {
       androidFiles.FRUIT_HISTORY
     );
   }
+}
+
+function roundHalfUp(num, places) {
+  let factor = Math.pow(10, places); // get the factor to multiply by
+  num = num * factor; // multiply the number by the factor
+  num = Math.round(num); // round the number to the nearest integer
+  num = num / factor; // divide the number by the factor
+  return num; // return the rounded number
 }
 </script>
 
