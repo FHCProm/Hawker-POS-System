@@ -78,28 +78,35 @@
       <div class="category-word">{{ category }}</div>
       <div class="black-line"></div>
     </div>
-    <div class="fruit-specs" v-for="fruit in TableData[category]" :key="fruit">
-      <div class="name-price-layout" @click="changePopUpVisibility(fruit.id)">
-        <div class="fruit-name">{{ fruit.name }}</div>
-        <div class="fruit-price">
-          RM{{ fruit.price }}/{{ fruit.measurement }}
+    <div class="fruit-list">
+      <div
+        class="fruit-specs fruit-specs--isDraggable"
+        v-for="fruit in TableData[category]"
+        :key="fruit"
+        ref="boxes"
+      >
+        <div class="name-price-layout" @click="changePopUpVisibility(fruit.id)">
+          <div class="fruit-name">{{ fruit.name }}</div>
+          <div class="fruit-price">
+            RM{{ fruit.price }}/{{ fruit.measurement }}
+          </div>
         </div>
-      </div>
-      <div class="delete-svg-layout" @click="confirmUserAction(fruit.id)">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke-width="1.5"
-          stroke="currentColor"
-          class="delete-svg"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            d="M9.75 9.75l4.5 4.5m0-4.5l-4.5 4.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-          />
-        </svg>
+        <div class="delete-svg-layout" @click="confirmUserAction(fruit.id)">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.5"
+            stroke="currentColor"
+            class="delete-svg"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M9.75 9.75l4.5 4.5m0-4.5l-4.5 4.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+            />
+          </svg>
+        </div>
       </div>
     </div>
   </div>
@@ -126,6 +133,7 @@ import CloudConfirmationBox from "../components/CloudConfirmationBox.vue";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import { writeToFile } from "../utility/android-fs";
 import androidFiles from "../config/androidFiles";
+import { Sortable } from "@shopify/draggable";
 
 const fruitStore = useFruitStore();
 const popUpModal = ref(null);
@@ -140,7 +148,13 @@ const cloudConfirmationBoxVisibility = ref(false);
 const uploadStatusText = ref("");
 const statusTextColor = ref("");
 
-onMounted(() => {});
+const boxes = ref(null);
+let selectedBox = ref(null);
+
+onMounted(() => {
+  let sortableList = createDraggableList();
+  console.log(sortableList);
+});
 
 const TableData = computed(() => {
   let data = {};
@@ -237,6 +251,23 @@ async function downloadFruitForSaleFromFirebase() {
 function delay(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
+
+function createDraggableList() {
+  const containerSelector = ".fruit-list";
+  const containers = document.querySelectorAll(containerSelector);
+  if (containers.length === 0) {
+    return false;
+  }
+  const sortable = new Sortable(containers, {
+    draggable: ".fruit-specs--isDraggable",
+    mirror: {
+      appendTo: containerSelector,
+      constrainDimensions: true,
+    },
+  });
+
+  return sortable;
+}
 </script>
 
 <style scoped>
@@ -273,10 +304,15 @@ function delay(ms) {
 .fruit-specs {
   margin: 1rem 1rem;
   display: flex;
-
   font-size: 1.3rem;
   box-shadow: 4px 4px 6px #d2d3d4, -4px -4px 6px #ffffff, -2px -2px 6px #d2d3d4,
     -4px -4px 6px #ffffff;
+  user-select: none;
+  /* -webkit-user-drag: element;
+  cursor: move; */
+}
+
+.fruit-specs--isDraggable {
 }
 
 .name-price-layout {

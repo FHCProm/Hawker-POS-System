@@ -123,6 +123,7 @@ function sendingCalculatorValue() {
   background: #cecdcd;
   border-radius: 5px;
 }
+
 .number:active {
   color: white;
   background: #7d7d7d;

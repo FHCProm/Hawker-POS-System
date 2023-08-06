@@ -11,15 +11,16 @@
     
     <preference name="AndroidPersistentFileLocation" value="Internal" />
     <preference name="Orientation" value="portrait" />
+    <preference name="DisallowOverscroll" value="true"/>
     <platform name="android">
         <icon src="res/icon/android/g380.xml" />
     </platform>
 
 
-<platform name="android">
-    <preference name="AndroidWindowSplashScreenAnimatedIcon" value="res/screen/android/exported_splashscreen.xml" />
-    <preference name="AndroidWindowSplashScreenBackground" value="#fd7b6a" />
-</platform>
+    <platform name="android">
+        <preference name="AndroidWindowSplashScreenAnimatedIcon" value="res/screen/android/exported_splashscreen.xml" />
+        <preference name="AndroidWindowSplashScreenBackground" value="#fd7b6a" />
+    </platform>
 
     
 </widget>
