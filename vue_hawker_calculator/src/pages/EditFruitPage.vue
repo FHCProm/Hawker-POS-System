@@ -78,12 +78,11 @@
       <div class="category-word">{{ category }}</div>
       <div class="black-line"></div>
     </div>
-    <div class="fruit-list">
+    <div class="fruit-list" :class="`category-${category}`">
       <div
-        class="fruit-specs fruit-specs--isDraggable"
+        class="fruit-specs"
         v-for="fruit in TableData[category]"
         :key="fruit"
-        ref="boxes"
       >
         <div class="name-price-layout" @click="changePopUpVisibility(fruit.id)">
           <div class="fruit-name">{{ fruit.name }}</div>
@@ -133,7 +132,7 @@ import CloudConfirmationBox from "../components/CloudConfirmationBox.vue";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import { writeToFile } from "../utility/android-fs";
 import androidFiles from "../config/androidFiles";
-import { Sortable } from "@shopify/draggable";
+import { Draggable } from "@shopify/draggable";
 
 const fruitStore = useFruitStore();
 const popUpModal = ref(null);
@@ -148,12 +147,8 @@ const cloudConfirmationBoxVisibility = ref(false);
 const uploadStatusText = ref("");
 const statusTextColor = ref("");
 
-const boxes = ref(null);
-let selectedBox = ref(null);
-
 onMounted(() => {
-  let sortableList = createDraggableList();
-  console.log(sortableList);
+  DraggableList();
 });
 
 const TableData = computed(() => {
@@ -252,25 +247,45 @@ function delay(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-function createDraggableList() {
-  const containerSelector = ".fruit-list";
-  const containers = document.querySelectorAll(containerSelector);
-  if (containers.length === 0) {
-    return false;
-  }
-  const sortable = new Sortable(containers, {
-    draggable: ".fruit-specs--isDraggable",
-    mirror: {
-      appendTo: containerSelector,
-      constrainDimensions: true,
-    },
-  });
+function DraggableList() {
+  for (let i = 0; i < fruitStore.saleCategories.length; i++) {
+    let containerClass = `.category-${fruitStore.saleCategories[i]}`;
 
-  return sortable;
+    const container = document.querySelector(containerClass);
+    if (container) {
+      const draggable = new Draggable(container, {
+        draggable: ".fruit-specs",
+
+        mirror: {
+          constrainDimensions: true,
+        },
+      });
+      draggable.on("drag:start", (evt) => {
+        // console.log(evt);
+      });
+      draggable.on("drag:over", (evt) => {});
+    }
+  }
+
+  // const sortable = new Sortable(containers, {
+  //   draggable: ".fruit-specs--isDraggable",
+  //   mirror: {
+  //     appendTo: containerSelector,
+  //     constrainDimensions: true,
+  //   },
+  // });
+
+  // return sortable;
 }
 </script>
 
 <style scoped>
+.draggable-mirror {
+  background: rgb(103, 204, 237);
+}
+.draggable--over {
+  border: 1px solid rgb(9, 97, 126);
+}
 .header {
   display: flex;
   align-items: center;
@@ -310,9 +325,6 @@ function createDraggableList() {
   user-select: none;
   /* -webkit-user-drag: element;
   cursor: move; */
-}
-
-.fruit-specs--isDraggable {
 }
 
 .name-price-layout {
