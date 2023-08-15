@@ -83,6 +83,7 @@
         class="fruit-specs"
         v-for="fruit in TableData[category]"
         :key="fruit"
+        :data-id="fruit.id"
       >
         <div class="name-price-layout" @click="changePopUpVisibility(fruit.id)">
           <div class="fruit-name">{{ fruit.name }}</div>
@@ -255,15 +256,33 @@ function DraggableList() {
     if (container) {
       const draggable = new Draggable(container, {
         draggable: ".fruit-specs",
-
         mirror: {
           constrainDimensions: true,
+          appendTo: (source) => {
+            return source.parentNode;
+          },
         },
       });
+
       draggable.on("drag:start", (evt) => {
         // console.log(evt);
       });
-      draggable.on("drag:over", (evt) => {});
+
+      draggable.on("drag:drop", (evt) => {
+        console.log(evt);
+      });
+
+      draggable.on("mirror:destroy", (evt) => {
+        evt.cancel();
+        //console.log(evt);
+        const { mirror } = evt;
+
+        mirror.classList.add("removing");
+
+        // setTimeout(() => {
+        //   mirror.parentNode.removeChild(mirror);
+        // }, 1000);
+      });
     }
   }
 
@@ -281,11 +300,27 @@ function DraggableList() {
 
 <style scoped>
 .draggable-mirror {
-  background: rgb(103, 204, 237);
+  background: #cbcaca;
 }
 .draggable--over {
-  border: 1px solid rgb(9, 97, 126);
+  border: 1px solid #cbcaca;
+  background-color: #ffffff;
+  background-image: url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23cbcaca' fill-opacity='0.55' fill-rule='evenodd'%3E%3Ccircle cx='3' cy='3' r='3'/%3E%3Ccircle cx='13' cy='13' r='3'/%3E%3C/g%3E%3C/svg%3E");
 }
+
+.removing {
+  animation: vanish 1s;
+}
+
+@keyframes vanish {
+  from {
+    transform: translate3d(-91px, 799px, 0px) scale(1);
+  }
+  to {
+    transform: translate3d(-91px, 799px, 0px) scale(0);
+  }
+}
+
 .header {
   display: flex;
   align-items: center;
@@ -322,7 +357,7 @@ function DraggableList() {
   font-size: 1.3rem;
   box-shadow: 4px 4px 6px #d2d3d4, -4px -4px 6px #ffffff, -2px -2px 6px #d2d3d4,
     -4px -4px 6px #ffffff;
-  user-select: none;
+  /* user-select: none; */
   /* -webkit-user-drag: element;
   cursor: move; */
 }
