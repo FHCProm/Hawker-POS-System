@@ -84,6 +84,8 @@
         v-for="fruit in TableData[category]"
         :key="fruit"
         :data-id="fruit.id"
+        @mouseenter="draggableEntered"
+        @mouseleave="draggableLeave"
       >
         <div class="name-price-layout" @click="changePopUpVisibility(fruit.id)">
           <div class="fruit-name">{{ fruit.name }}</div>
@@ -147,6 +149,10 @@ const cloudConfirmationBoxVisibility = ref(false);
 
 const uploadStatusText = ref("");
 const statusTextColor = ref("");
+
+const isDragging = ref(false);
+const draggableSrc = ref(undefined);
+const draggableTarget = ref(undefined);
 
 onMounted(() => {
   DraggableList();
@@ -265,36 +271,47 @@ function DraggableList() {
       });
 
       draggable.on("drag:start", (evt) => {
-        // console.log(evt);
-      });
-
-      draggable.on("drag:drop", (evt) => {
-        console.log(evt);
+        isDragging.value = true;
+        draggableSrc.value = evt.data.source.dataset.id;
       });
 
       draggable.on("mirror:destroy", (evt) => {
-        evt.cancel();
+        // evt.cancel();
         //console.log(evt);
-        const { mirror } = evt;
-
-        mirror.classList.add("removing");
-
+        // const { mirror } = evt;
+        // mirror.classList.add("removing");
         // setTimeout(() => {
         //   mirror.parentNode.removeChild(mirror);
         // }, 1000);
       });
+
+      draggable.on("drag:stop", (evt) => {
+        isDragging.value = false;
+        console.log("src", draggableSrc.value, "target", draggableTarget.value);
+        if (draggableSrc.value == draggableTarget.value) {
+          console.log("no changes in order");
+        }
+        if (draggableSrc.value != draggableTarget.value) {
+          console.log("changing the order now");
+        }
+        draggableSrc.value = undefined;
+      });
     }
   }
+}
 
-  // const sortable = new Sortable(containers, {
-  //   draggable: ".fruit-specs--isDraggable",
-  //   mirror: {
-  //     appendTo: containerSelector,
-  //     constrainDimensions: true,
-  //   },
-  // });
-
-  // return sortable;
+function draggableEntered(evt) {
+  if (isDragging.value) {
+    console.log("mouse enter");
+    draggableTarget.value = evt.srcElement.dataset.id;
+  }
+}
+function draggableLeave(evt) {
+  if (isDragging.value) {
+    draggableTarget.value = undefined;
+    console.log("mouse left");
+    console.log("problem is here");
+  }
 }
 </script>
 
