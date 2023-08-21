@@ -84,8 +84,6 @@
         v-for="fruit in TableData[category]"
         :key="fruit"
         :data-id="fruit.id"
-        @mouseenter="draggableEntered"
-        @mouseleave="draggableLeave"
       >
         <div class="name-price-layout" @click="changePopUpVisibility(fruit.id)">
           <div class="fruit-name">{{ fruit.name }}</div>
@@ -150,9 +148,7 @@ const cloudConfirmationBoxVisibility = ref(false);
 const uploadStatusText = ref("");
 const statusTextColor = ref("");
 
-const isDragging = ref(false);
 const draggableSrc = ref(undefined);
-const draggableTarget = ref(undefined);
 
 onMounted(() => {
   DraggableList();
@@ -271,7 +267,6 @@ function DraggableList() {
       });
 
       draggable.on("drag:start", (evt) => {
-        isDragging.value = true;
         draggableSrc.value = evt.data.source.dataset.id;
       });
 
@@ -286,32 +281,35 @@ function DraggableList() {
       });
 
       draggable.on("drag:stop", (evt) => {
-        isDragging.value = false;
-        console.log("src", draggableSrc.value, "target", draggableTarget.value);
-        if (draggableSrc.value == draggableTarget.value) {
-          console.log("no changes in order");
+        const highlightedContainers =
+          document.querySelectorAll(".draggable--over");
+        if (highlightedContainers[0].dataset.id === draggableSrc.value) {
+          console.log("data in table is not changed");
         }
-        if (draggableSrc.value != draggableTarget.value) {
-          console.log("changing the order now");
+        if (highlightedContainers[0].dataset.id !== draggableSrc.value) {
+          const indexToChange = getIndexes(
+            highlightedContainers[0].dataset.id,
+            draggableSrc.value
+          );
+          console.log(indexToChange);
         }
-        draggableSrc.value = undefined;
       });
     }
   }
 }
 
-function draggableEntered(evt) {
-  if (isDragging.value) {
-    console.log("mouse enter");
-    draggableTarget.value = evt.srcElement.dataset.id;
+function getIndexes(targetId, srcId) {
+  let targetIndex;
+  let srcIndex;
+  for (let i = 0; i < fruitStore.fruitsForSale.length; i++) {
+    if (fruitStore.fruitsForSale[i].id === Number(targetId)) {
+      targetIndex = i;
+    }
+    if (fruitStore.fruitsForSale[i].id === Number(srcId)) {
+      srcIndex = i;
+    }
   }
-}
-function draggableLeave(evt) {
-  if (isDragging.value) {
-    draggableTarget.value = undefined;
-    console.log("mouse left");
-    console.log("problem is here");
-  }
+  return { targetIndex: targetIndex, srcIndex: srcIndex };
 }
 </script>
 
