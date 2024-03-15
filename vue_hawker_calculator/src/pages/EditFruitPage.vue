@@ -268,6 +268,7 @@ function DraggableList() {
 
       draggable.on("drag:start", (evt) => {
         draggableSrc.value = evt.data.source.dataset.id;
+        console.log(draggableSrc.value);
       });
 
       draggable.on("mirror:destroy", (evt) => {
@@ -292,11 +293,17 @@ function DraggableList() {
             draggableSrc.value
           );
           console.log(indexToChange);
+          let srcIndexValue = fruitStore.fruitsForSale[indexToChange.srcIndex];
+          let targetIndexValue =
+            fruitStore.fruitsForSale[indexToChange.targetIndex];
+          fruitStore.fruitsForSale[indexToChange.srcIndex] = targetIndexValue;
+          fruitStore.fruitsForSale[indexToChange.targetIndex] = srcIndexValue;
         }
       });
     }
   }
 }
+``;
 
 function getIndexes(targetId, srcId) {
   let targetIndex;
