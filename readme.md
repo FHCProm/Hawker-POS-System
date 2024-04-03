@@ -4,9 +4,9 @@
 
 ## Functionalities
 
- **-Listed prices of vegetables  
- -Added multiples vegetable with specific units to calculate the total price of good 
- -Stored selected good in cart before allowing customer to proceed to checkout** 
+ -Listed prices of vegetables  <br>
+ -Added multiples vegetable with specific units to calculate the total price of good <br>
+ -Stored selected good in cart before allowing customer to proceed to checkout
 
  
 ## Tools Involved:
