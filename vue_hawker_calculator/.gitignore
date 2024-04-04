@@ -29,4 +29,4 @@ coverage
 *.sw?
 
 
-src/config
+src/config/firebaseConfig.js
